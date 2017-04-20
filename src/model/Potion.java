@@ -1,6 +1,7 @@
 package model;
 
-public abstract class Potion implements Item {
+public abstract class Potion implements Item 
+{
 	//restores health
 	private final String name;
 	private final String description;
@@ -14,12 +15,10 @@ public abstract class Potion implements Item {
 	}
 	
 	@Override
-	public String name() {
-		return name;
-	}
+	public String name() {return name;}
 
 	@Override
-	public double price() {
-		return price;
-	}
+	public double price() { return price;}
+	
+	public String description() {return description;}
 }
