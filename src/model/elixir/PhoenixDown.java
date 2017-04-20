@@ -1,11 +1,16 @@
 package model.elixir;
 
-import model.Potion;
-import utility.PotionValues;
+import model.Elixir;
+import utility.ElixirValues;
 
-public class PhoenixDown extends Potion implements PotionValues{
+public class PhoenixDown extends Elixir implements ElixirValues{
 	
 	public PhoenixDown(){
-		super(P3[0], P3[1], Double.parseDouble(P3[2]));
+		super(E2[0], E2[1], Double.parseDouble(E3[2]));
+	}
+
+	@Override
+	public Elixir clone() {
+		return new PhoenixDown();
 	}
 }

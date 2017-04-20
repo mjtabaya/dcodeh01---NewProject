@@ -20,4 +20,7 @@ public abstract class Trinket implements Item {
 	public double price() { return price;}
 	
 	public String description() {return description;}
+	
+	@Override
+	public abstract Trinket clone();
 }

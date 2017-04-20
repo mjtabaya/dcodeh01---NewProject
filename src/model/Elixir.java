@@ -21,4 +21,7 @@ public abstract class Elixir implements Item
 	public double price() { return price;}
 	
 	public String description() {return description;}
+
+	@Override
+	public abstract Elixir clone();
 }

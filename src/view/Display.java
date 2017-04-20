@@ -51,4 +51,17 @@ public class Display {
 		for(int i=50; i > 0 ; i--)
 			System.out.println(i);
 	}
+	
+
+	
+	public static String AlignLeftTextInField(String text, int field)
+	{
+		int space = field-text.length();
+		String alignedText = text;
+		for (int i=0; i<space; i++)
+			alignedText+=" ";
+		return alignedText;
+	}
+	
+	
 }

@@ -1,11 +1,16 @@
 package model.elixir;
-import model.Potion;
+import model.Elixir;
 
-import utility.PotionValues;
+import utility.ElixirValues;
 
-public class ZerthulElixir extends Potion implements PotionValues{
+public class ZerthulElixir extends Elixir implements ElixirValues{
 	
 	public ZerthulElixir(){
-		super(P1[0], P1[1], Double.parseDouble(P1[2]));
+		super(E3[0], E3[1], Double.parseDouble(E3[2]));
+	}
+	
+	@Override
+	public Elixir clone() {
+		return new ZerthulElixir();
 	}
 }

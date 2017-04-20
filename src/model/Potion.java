@@ -1,6 +1,6 @@
 package model;
 
-public abstract class Potion implements Item 
+public abstract class Potion implements Item, Cloneable
 {
 	//restores health
 	private final String name;
@@ -21,4 +21,7 @@ public abstract class Potion implements Item
 	public double price() { return price;}
 	
 	public String description() {return description;}
+	
+	@Override
+	public abstract Potion clone();
 }
