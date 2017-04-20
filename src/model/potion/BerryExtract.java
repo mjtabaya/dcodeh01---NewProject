@@ -1,8 +1,10 @@
 package model.potion;
+import model.Potion;
+import utility.PotionValues;
 
-public class BerryExtract extends BluePotion {
-
+public class BerryExtract extends Potion implements PotionValues{
+	
 	public BerryExtract(){
-		super("Berry Extract", "An apple a day keeps the evil doctors away", 15.25);
+		super(RP1[0], RP1[1], Double.parseDouble(RP1[2]));
 	}
 }
