@@ -24,9 +24,10 @@ public class ElixirFactory implements ElixirMaker, AbstractFactoryForProjectShop
 	@Override
 	public Elixir getElixir(String elixirId) 
 	{
-
 		try
 		{
+
+			System.out.println(elixirId);
 			return prototypeMap.get(elixirId).clone();
 		}
 		catch (NullPointerException npe)

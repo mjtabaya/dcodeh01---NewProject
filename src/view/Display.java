@@ -1,6 +1,64 @@
 package view;
 
+import utility.ElixirValues;
+import utility.PotionValues;
+import utility.TrinketValues;
+
 public class Display {
+	
+	public static void printCatalog()
+    {//shoplist print be like:
+        int code=1;
+        int itype=1; //i<subtypes of each
+        String type="";
+       
+        if (itype==1)
+        {
+            type = "P";
+            for(int i=1; i<4; i++) //i<subtypes of potion
+            {
+                type += i;
+                String[] print = PotionValues.toString(type);
+                for(int j=0; j<3; j++) //j<itemAttributes, name,desc.price,etc.
+                {
+                    System.out.println(print[j]);
+                }
+                type = type.substring(0, type.length()-1); //remove subtype
+            }
+            itype++; //move to next type: elixirs
+        }
+        
+        if (itype==2)
+        {
+        	type = "E";
+            for(int i=1; i<4; i++) //i<subtypes of potion
+            {
+                type += i;
+                String[] print = ElixirValues.toString(type);
+                for(int j=0; j<3; j++) //j<itemAttributes, name,desc.price,etc.
+                {
+                    System.out.println(print[j]);
+                }
+                type = type.substring(0, type.length()-1); //remove subtype
+            }
+            itype++; //move to next type: trinket
+        }
+        if (itype==3)
+        {
+        	type = "T";
+            for(int i=1; i<4; i++) //i<subtypes of potion
+            {
+                type += i;
+                String[] print = TrinketValues.toString(type);
+                for(int j=0; j<3; j++) //j<itemAttributes, name,desc.price,etc.
+                {
+                    System.out.println(print[j]);
+                }
+                type = type.substring(0, type.length()-1); //remove subtype
+            }
+            itype++; 
+        }
+    }
 	
 	public static void loadScreen(int screenCode) {
 		

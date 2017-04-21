@@ -30,11 +30,15 @@ public class Cart {
 	@SuppressWarnings("unchecked")
 	public List<ArrayList<String>> getItems()
 	{
+		for(Item i : items)
+			if(i!=null)
+				System.out.println(i.name());
 		//debug:System.out.println(items.get(0).getClass());
 		//Set "unique" variable used to get unique instances
 		Set<Item> unique = new HashSet<Item>(items);
-		System.out.println(items.get(0).name());
-		System.out.println(items.get(0).price());
+		
+		//debug:System.out.println(items.get(0).name());
+		//debug:System.out.println(items.get(0).price());
 		
 		//List of arrayLists "arrangedCart" used to store <name,count,price> arrays for display
 		List<ArrayList<String>> arrangedCart = new ArrayList<ArrayList<String>>();
