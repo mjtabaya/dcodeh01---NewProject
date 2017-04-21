@@ -5,6 +5,9 @@ import utility.PotionValues;
 import utility.TrinketValues;
 
 public class Display {
+	final static int numPotionTypes = 3;
+	final static int numElixirTypes = 3;
+	final static int numTrinketTypes = 3;
 	
 	public static void printCatalog()
     {//shoplist print be like:
@@ -15,15 +18,17 @@ public class Display {
         if (itype==1)
         {
             type = "P";
-            for(int i=1; i<4; i++) //i<subtypes of potion
+            for(int i=1; i<numPotionTypes+1; i++) //i<subtypes of potion
             {
                 type += i;
                 String[] print = PotionValues.toString(type);
+                System.out.print("Item Entry [" + code + "]");
                 for(int j=0; j<3; j++) //j<itemAttributes, name,desc.price,etc.
                 {
                     System.out.println(print[j]);
                 }
                 type = type.substring(0, type.length()-1); //remove subtype
+                code++; //iterate item code
             }
             itype++; //move to next type: elixirs
         }
@@ -31,30 +36,34 @@ public class Display {
         if (itype==2)
         {
         	type = "E";
-            for(int i=1; i<4; i++) //i<subtypes of potion
+            for(int i=1; i<numElixirTypes+1; i++)
             {
                 type += i;
                 String[] print = ElixirValues.toString(type);
-                for(int j=0; j<3; j++) //j<itemAttributes, name,desc.price,etc.
+                System.out.print("Item Entry [" + code + "]");
+                for(int j=0; j<3; j++)
                 {
                     System.out.println(print[j]);
                 }
-                type = type.substring(0, type.length()-1); //remove subtype
+                type = type.substring(0, type.length()-1);
+                code++;
             }
             itype++; //move to next type: trinket
         }
         if (itype==3)
         {
         	type = "T";
-            for(int i=1; i<4; i++) //i<subtypes of potion
+            for(int i=1; i<numTrinketTypes+1; i++)
             {
                 type += i;
                 String[] print = TrinketValues.toString(type);
-                for(int j=0; j<3; j++) //j<itemAttributes, name,desc.price,etc.
+                System.out.print("Item Entry [" + code + "]");
+                for(int j=0; j<3; j++)
                 {
                     System.out.println(print[j]);
                 }
                 type = type.substring(0, type.length()-1); //remove subtype
+                code++;
             }
             itype++; 
         }

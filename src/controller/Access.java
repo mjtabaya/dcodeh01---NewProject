@@ -53,7 +53,7 @@ public class Access {
 		//store cart items in local variable "itemCart" for easier use
 		List<ArrayList<String>> itemCart = ShopHelper.getCart().getItems();
 		
-		System.out.println(String.format("%20s", "-----Output---"));
+		System.out.println(String.format("%30s", "-----Test Run Output---"));
 		
 		//displaying each arraylist to be implemented by Display.java as a method
 		//that accepts "List<ArrayList<String>> itemCart" as a parameter
@@ -61,9 +61,10 @@ public class Access {
 		//first .get is for items *unique items* 2nd get is for the above n,c,p
 		for (int i = itemCart.size()-1; i > -1 ; i--) //reverse to print the first item ordered first
 		{
-			System.out.println("Item name: " + itemCart.get(i).get(0));
-			System.out.println("Item amount: " + itemCart.get(i).get(1));
-			System.out.println("Total price: " + itemCart.get(i).get(2));
+			String n = Display.AlignLeftTextInField(("Item name: " + itemCart.get(i).get(0)), 30);
+			String a = Display.AlignLeftTextInField(("| Item amount: " + itemCart.get(i).get(1)),30);
+			String p = Display.AlignLeftTextInField(("| Total price: " + itemCart.get(i).get(2)),30);
+			System.out.println(String.format("%30s%30s%30s", n,a,p));
 		}
 	}
 
