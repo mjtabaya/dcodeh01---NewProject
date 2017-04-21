@@ -14,27 +14,33 @@ public class ShopHelper {
 	//constructor is set to private
 	private ShopHelper(){
 		setCart(new Cart());
+		//System.out.println("Cart initialized");
 	}
 	
 	//we call this to make a ShopHelper instance the first time it's called
 	//and to limit instantiation to that single instance
 	public static ShopHelper getShopHelperInstance() {
 		return (sh==null) 
-				? new ShopHelper()
+				? sh = new ShopHelper()
 				: sh;
 	}
 	
 	public void addToCart(String input, int amount)
 	{
-		String type = input.substring(0, 0); //expected P, E or T
+		//use this sysout to verify input and amount parameters
+		//System.out.println(input + " amount: " + Integer.toString(amount));
+		String type = input.substring(0, 1); //expected P, E or T
 		try
 		{
-			if(type=="P")
-				cart.addItem(FactoryProducer.getFactory(type).getPotion(input));
-			else if(type=="E")
-				cart.addItem(FactoryProducer.getFactory(type).getElixir(input));
-			else if(type=="T")
-				cart.addItem(FactoryProducer.getFactory(type).getTrinket(input));
+			if(type.contentEquals("P"))
+				for (int i=0; i<amount; i++)
+					cart.addItem(FactoryProducer.getFactory(type).getPotion(input));
+			else if(type.contentEquals("E"))
+				for (int i=0; i<amount; i++)
+					cart.addItem(FactoryProducer.getFactory(type).getElixir(input));
+			else if(type.contentEquals("T"))
+				for (int i=0; i<amount; i++)
+					cart.addItem(FactoryProducer.getFactory(type).getTrinket(input));
 			else
 				throw new InvalidItemException();
 		}
@@ -45,7 +51,7 @@ public class ShopHelper {
 	}
 
 	//use by Display
-	private static Cart getCart() {
+	public static Cart getCart() {
 		return cart;
 	}
 
