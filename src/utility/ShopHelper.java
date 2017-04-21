@@ -12,18 +12,16 @@ public class ShopHelper {
 	private static ShopHelper sh;
 	
 	//constructor is set to private
-	private ShopHelper(){
+	private ShopHelper()
+	{
 		setCart(new Cart());
 		//System.out.println("Cart initialized");
 	}
 	
 	//we call this to make a ShopHelper instance the first time it's called
 	//and to limit instantiation to that single instance
-	public static ShopHelper getShopHelperInstance() {
-		return (sh==null) 
-				? sh = new ShopHelper()
-				: sh;
-	}
+	public static ShopHelper getShopHelperInstance() 
+	{return (sh==null) ? sh = new ShopHelper(): sh;}
 	
 	public void addToCart(String input, int amount)
 	{
@@ -51,12 +49,8 @@ public class ShopHelper {
 	}
 
 	//use by Display
-	public static Cart getCart() {
-		return cart;
-	}
+	public static Cart getCart() {return cart;}
 
-	private static void setCart(Cart cart) {
-		ShopHelper.cart = cart;
-	}
+	private static void setCart(Cart cart) {ShopHelper.cart = cart;}
 
 }

@@ -35,7 +35,8 @@ public class Cart {
 		//List of arrayLists "arrangedCar" used to store <name,count,price> arrays for display
 		List<ArrayList<String>> arrangedCart = new ArrayList<ArrayList<String>>();
 		
-		for (Item key : unique) {
+		for (Item key : unique) 
+		{
 			//store unique item as string
 			ArrayList<String> itemCount = new ArrayList<String>();
 			itemCount.add(key.name()); //keyname added to first '0' index of first arraylist in list of arraylists

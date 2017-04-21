@@ -5,7 +5,7 @@ import utility.PotionValues;
 public class BerryExtract extends Potion implements PotionValues{
 	
 	public BerryExtract(){
-		super(P1[0], P1[1], Double.parseDouble(P1[2]));
+		super(P2[0], P2[1], Double.parseDouble(P2[2]));
 	}
 
 	@Override
