@@ -26,8 +26,6 @@ public class ElixirFactory implements ElixirMaker, AbstractFactoryForProjectShop
 	{
 		try
 		{
-
-			System.out.println(elixirId);
 			return prototypeMap.get(elixirId).clone();
 		}
 		catch (NullPointerException npe)

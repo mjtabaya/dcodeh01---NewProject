@@ -30,10 +30,9 @@ public class ShopHelper {
 	
 	public void processItem(String input, int amount)
 	{
-		//use this sysout to verify input and amount parameters
-		//System.out.println(input + " amount: " + Integer.toString(amount));
+		//********use this sysout to verify input and amount parameters**************//
+		//********System.out.println(input + " amount: " + Integer.toString(amount));//
 		String type = input.substring(0, 1); //expected P, E or T
-		System.out.println(input);
 		try
 		{
 			int i =0;
@@ -56,7 +55,12 @@ public class ShopHelper {
 	}
 
 	//use by Display
-	public static Cart getCart() {return cart;}
+	public static Cart getCart() 
+	{
+		if(sh==null)
+				sh = new ShopHelper();
+		return cart;
+	}
 
 	private static void setCart(Cart cart) {ShopHelper.cart = cart;}
 	

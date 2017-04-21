@@ -27,7 +27,12 @@ public class Access {
 		}
 		*/
 		Display.printCatalog();
-		System.out.println(String.format("%20s", "-----Input----"));
+		testRun();
+		
+	}
+	
+	public static void testRun()
+	{
 		ShopHelper.getShopHelperInstance().processItem("P1", 2);
 		ShopHelper.getShopHelperInstance().processItem("P2", 3);
 		ShopHelper.getShopHelperInstance().processItem("P3", 4);
@@ -45,12 +50,13 @@ public class Access {
 		//ordering the same item regardless of the amount works
 		
 		
-		//store cart items in local variable for easier use
+		//store cart items in local variable "itemCart" for easier use
 		List<ArrayList<String>> itemCart = ShopHelper.getCart().getItems();
 		
 		System.out.println(String.format("%20s", "-----Output---"));
 		
-		//displaying each arraylist 
+		//displaying each arraylist to be implemented by Display.java as a method
+		//that accepts "List<ArrayList<String>> itemCart" as a parameter
 		//(that is one arraylist = item rearranged to a <name,count,price>)
 		//first .get is for items *unique items* 2nd get is for the above n,c,p
 		for (int i = itemCart.size()-1; i > -1 ; i--) //reverse to print the first item ordered first
@@ -59,7 +65,6 @@ public class Access {
 			System.out.println("Item amount: " + itemCart.get(i).get(1));
 			System.out.println("Total price: " + itemCart.get(i).get(2));
 		}
-		
 	}
 
 }
