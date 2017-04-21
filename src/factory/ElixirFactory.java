@@ -9,6 +9,7 @@ import model.elixir.*;
 
 public class ElixirFactory implements ElixirMaker, AbstractFactoryForProjectShop
 {
+	//create a Map to hold a source object for each class
 	static final Map<String, Elixir> prototypeMap = new HashMap<>();
 	
 	static 
@@ -18,6 +19,8 @@ public class ElixirFactory implements ElixirMaker, AbstractFactoryForProjectShop
 		prototypeMap.put("E3", new ZerthulElixir());
 	}
 
+	//the source objects in the prototypeMap serve as base for cloning
+	//cloning is more efficient than creating and returning a new Object()
 	@Override
 	public Elixir getElixir(String elixirId) 
 	{
