@@ -30,24 +30,31 @@ public class Cart {
 	@SuppressWarnings("unchecked")
 	public List<ArrayList<String>> getItems()
 	{
-		//Set "unique" used to get unique instances
+		//debug:System.out.println(items.get(0).getClass());
+		//Set "unique" variable used to get unique instances
 		Set<Item> unique = new HashSet<Item>(items);
-		//List of arrayLists "arrangedCar" used to store <name,count,price> arrays for display
+		System.out.println(items.get(0).name());
+		System.out.println(items.get(0).price());
+		
+		//List of arrayLists "arrangedCart" used to store <name,count,price> arrays for display
 		List<ArrayList<String>> arrangedCart = new ArrayList<ArrayList<String>>();
 		
 		for (Item key : unique) 
 		{
 			//store unique item as string
 			ArrayList<String> itemCount = new ArrayList<String>();
-			itemCount.add(key.name()); //keyname added to first '0' index of first arraylist in list of arraylists
-			//store count variable for store then use for total price
-			int count = Collections.frequency(items, key);
-			itemCount.add(Integer.toString(count)); //count added to index 1
-
-			//store total price
-			double tprice = key.price()*count;
-			itemCount.add(Double.toString(tprice)); //total price to index 2
-			arrangedCart.add(itemCount);
+			if(key!=null)
+			{
+				itemCount.add(key.name()); //keyname added to first '0' index of first arraylist in list of arraylists
+				//store count variable for store then use for total price
+				int count = Collections.frequency(items, key);
+				itemCount.add(Integer.toString(count)); //count added to index 1
+	
+				//store total price
+				double tprice = key.price()*count;
+				itemCount.add(Double.toString(tprice)); //total price to index 2
+				arrangedCart.add(itemCount);
+			}
 		}
 		return arrangedCart;
 	}

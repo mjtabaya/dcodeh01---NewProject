@@ -7,7 +7,7 @@ import utility.PotionValues;
 
 public class Inventory implements PotionValues{
 	
-	final Map<String, Integer> inventoryMap = new HashMap<String, Integer>() 
+	final static Map<String, Integer> inventoryMap = new HashMap<String, Integer>() 
 	{
 		//don't mind this id
 		private static final long serialVersionUID = 3L;
@@ -24,8 +24,27 @@ public class Inventory implements PotionValues{
 		   put("T1", 10);
 		   put("T2", 10);
 		   put("T3", 10);
-		   //subtract to inventory by map.put(key, map.get(key) - 1);
+		   //subtract to inventory by inventoryMap.put(key, inventoryMap.get(key) - 1);
 		}
 	};
+	
+	public boolean fetchItem(String code)
+	{
+		if (this.checkStock(code))
+		{
+			inventoryMap.put(code, inventoryMap.get(code) - 1);
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	public boolean checkStock(String code)
+	{
+		if (inventoryMap.get(code)>0)
+			return true;
+		else
+			return false;
+	}
 
 }
