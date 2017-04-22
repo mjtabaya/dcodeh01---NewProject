@@ -30,7 +30,7 @@ public class Inventory implements PotionValues{
 	
 	public boolean fetchItem(String code)
 	{
-		if (this.checkStock(code))
+		if (this.hasStock(code))
 		{
 			inventoryMap.put(code, inventoryMap.get(code) - 1);
 			return true;
@@ -39,12 +39,17 @@ public class Inventory implements PotionValues{
 			return false;
 	}
 	
-	public boolean checkStock(String code)
+	public boolean hasStock(String code)
 	{
 		if (inventoryMap.get(code)>0)
 			return true;
 		else
 			return false;
+	}
+	
+	public int checkStock(String code)
+	{
+		return inventoryMap.get(code);
 	}
 
 }

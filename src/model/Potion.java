@@ -6,12 +6,21 @@ public abstract class Potion implements Item, Cloneable
 	private final String name;
 	private final String description;
 	private final double price;
+	private final int code;
 	
-	public Potion(String name, String description, double price)
+//	public Potion(String name, String description, double price)
+//	{
+//		this.name = name;
+//		this.description = description;
+//		this.price = price;
+//	}
+	
+	public Potion(String name, String description, double price, int code)
 	{
 		this.name = name;
 		this.description = description;
 		this.price = price;
+		this.code = code;
 	}
 	
 	@Override
@@ -21,6 +30,9 @@ public abstract class Potion implements Item, Cloneable
 	public double price() { return price;}
 	
 	public String description() {return description;}
+	
+	@Override
+	public int code() {return code;}
 	
 	@Override
 	public abstract Potion clone();

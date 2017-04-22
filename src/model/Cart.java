@@ -50,6 +50,10 @@ public class Cart {
 				//store total price
 				double tprice = key.price()*count;
 				itemCount.add(Double.toString(tprice)); //total price to index 2
+				
+				int code = key.code();
+				itemCount.add(Integer.toString(code));
+				
 				arrangedCart.add(itemCount);
 			}
 		}

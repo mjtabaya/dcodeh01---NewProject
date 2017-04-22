@@ -5,12 +5,21 @@ public abstract class Trinket implements Item {
 	private final String name;
 	private final String description;
 	private final double price;
+	private final int code;
 	
-	public Trinket(String name, String description, double price)
+//	public Trinket(String name, String description, double price)
+//	{
+//		this.name = name;
+//		this.description = description;
+//		this.price = price;
+//	}
+	
+	public Trinket(String name, String description, double price, int code)
 	{
 		this.name = name;
 		this.description = description;
 		this.price = price;
+		this.code = code;
 	}
 	
 	@Override
@@ -20,6 +29,9 @@ public abstract class Trinket implements Item {
 	public double price() { return price;}
 	
 	public String description() {return description;}
+	
+	@Override
+	public int code() {return code;}
 	
 	@Override
 	public abstract Trinket clone();

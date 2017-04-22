@@ -1,12 +1,11 @@
 package model.elixir;
 import model.Elixir;
-
 import utility.ElixirValues;
 
 public class ZerthulElixir extends Elixir implements ElixirValues{
 	
 	public ZerthulElixir(){
-		super(E3[0], E3[1], Double.parseDouble(E3[2]));
+		super(E3[0], E3[1], Double.parseDouble(E3[2]), Integer.parseInt(E3[3]));
 	}
 	
 	@Override
