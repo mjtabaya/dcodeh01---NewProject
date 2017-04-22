@@ -68,16 +68,25 @@ public class ShopHelper {
 	{
 		if (inventory.fetchItem(code)) //if item was fetched successfully
 		{
-			if(type.equals("P"))
-				cart.addItem(FactoryProducer.getFactory(type).getPotion(code));
-			else if(type.equals("E"))
-				cart.addItem(FactoryProducer.getFactory(type).getElixir(code));
-			else if(type.equals("T"))
-				cart.addItem(FactoryProducer.getFactory(type).getTrinket(code));
+			Item itemToAdd = getProduct(type, code);
+			if(itemToAdd !=null)
+				cart.addItem(itemToAdd);
 			return true;
 		}
 		else
 			return false;
+	}
+	
+	public static Item getProduct(String type, String code)
+	{
+		if(type.equals("P"))
+			return FactoryProducer.getFactory(type).getPotion(code);
+		else if(type.equals("E"))
+			return FactoryProducer.getFactory(type).getElixir(code);
+		else if(type.equals("T"))
+			return FactoryProducer.getFactory(type).getTrinket(code);
+		else
+			return null;
 	}
 	
 	//use for displaying stock only
@@ -94,6 +103,8 @@ public class ShopHelper {
 				sh = new ShopHelper();
 		return cart;
 	}
+	
+	public Inventory getInventory() {return inventory;}
 
 	private static void setCart(Cart cart) {ShopHelper.cart = cart;}
 

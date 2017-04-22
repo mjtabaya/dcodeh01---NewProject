@@ -6,6 +6,7 @@ import java.util.Map;
 import utility.PotionValues;
 
 public class Inventory implements PotionValues{
+	private static int maxStock = 10;
 	
 	final static Map<String, Integer> inventoryMap = new HashMap<String, Integer>() 
 	{
@@ -13,17 +14,17 @@ public class Inventory implements PotionValues{
 		private static final long serialVersionUID = 3L;
 		{
 			//set initial inventory amount for items as 10
-		   put("P1", 10);
-		   put("P2", 10);
-		   put("P3", 10);
+		   put("P1", maxStock);
+		   put("P2", maxStock);
+		   put("P3", maxStock);
 		   
-		   put("E1", 10);
-		   put("E2", 10);
-		   put("E3", 10);
+		   put("E1", maxStock);
+		   put("E2", maxStock);
+		   put("E3", maxStock);
 		   
-		   put("T1", 10);
-		   put("T2", 10);
-		   put("T3", 10);
+		   put("T1", maxStock);
+		   put("T2", maxStock);
+		   put("T3", maxStock);
 		   //subtract to inventory by inventoryMap.put(key, inventoryMap.get(key) - 1);
 		}
 	};
@@ -50,6 +51,11 @@ public class Inventory implements PotionValues{
 	public int checkStock(String code)
 	{
 		return inventoryMap.get(code);
+	}
+	
+	public int getMaxStock()
+	{
+		return maxStock;
 	}
 
 }

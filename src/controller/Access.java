@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import utility.ShopHelper;
 import utility.ShopRunner;
 
 public class Access {
@@ -10,7 +9,6 @@ public class Access {
 		ShopRunner.runShop();
 		ShopRunner.testRun();
 		ShopRunner.runShop();
-		
 	}
 
 }

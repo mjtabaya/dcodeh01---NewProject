@@ -1,6 +1,3 @@
-/controller/
-/exception/
-/factory/
-/model/
 /utility/
-/view/
+/model/
+/exception/

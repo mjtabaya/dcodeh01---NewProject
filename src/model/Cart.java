@@ -16,6 +16,11 @@ public class Cart {
 		items.add(item);
 	}
 	
+	public boolean removeItem(Item item) 
+	{
+		return items.remove(item.getClass());
+	}
+	
 	public float getCost()
 	{
 		float cost = 0.0f;
@@ -27,7 +32,6 @@ public class Cart {
 		return cost;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<ArrayList<String>> getItems()
 	{
 		//Set "unique" variable used to get unique instances
