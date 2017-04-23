@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import exception.InvalidCheckoutException;
+import exception.EmptyCartException;
 import exception.InvalidCreditCardNumberException;
 import exception.InvalidItemException;
 import exception.InvalidMenuSelectionException;
@@ -84,7 +84,7 @@ public class ShopRunner {
 						case "C":
 							if(ShopHelper.getCart().getTotalItemsCount()<1)
 							{
-								throw new InvalidCheckoutException();
+								throw new EmptyCartException();
 							}
 							else
 							{
@@ -109,9 +109,9 @@ public class ShopRunner {
 				Display.setState(341);
 				Display.subOperation("");
 			}
-			catch(InvalidCheckoutException ice)
+			catch(EmptyCartException ece)
 			{
-				System.out.println(ice.getMessage());
+				System.out.println(ece.getMessage());
 				Display.setState(441);
 				Display.subOperation("");
 			}
@@ -132,8 +132,8 @@ public class ShopRunner {
 			catch (InvalidItemException iie)
 			{
 				System.out.println("Input for product code was invalid.");
-				Display.setState(04);
-				Display.subOperation("");
+				Display.setState(141);
+				Display.subOperation(input);
 			}
 		}
 		
@@ -184,7 +184,7 @@ public class ShopRunner {
 			catch (InvalidCreditCardNumberException icce)
 			{
 				System.out.println("Invalid [Checkout] detected. " + icce.getMessage());
-				Display.setState(441);
+				Display.setState(442);
 				Display.subOperation("");
 			}
 		else
@@ -305,10 +305,33 @@ public class ShopRunner {
 	}
 	
 	private static boolean creditCardInput(String cardInput)
-	{
-		//credit card processing logic
-		return false;
-	}
+    {
+        boolean value = false;
+        //credit card processing logic
+        if(cardInput.length() == 16)
+        {
+            int s1 = 0, s2 = 0;
+            String reverse = new StringBuffer(cardInput).reverse().toString();
+            for(int i = 0 ;i < reverse.length();i++){
+                int digit = Character.digit(reverse.charAt(i), 10);
+                if(i % 2 == 0){//this is for odd digits, they are 1-indexed in the algorithm
+                    s1 += digit;
+                }else{//add 2 * digit for 0-4, add 2 * digit - 9 for 5-9
+                    s2 += 2 * digit;
+                    if(digit >= 5){
+                        s2 -= 9;
+                    }
+                }
+            }
+           value = ((s1 + s2) % 10 == 0);
+        }
+        else
+        {
+            value = false;
+        }
+       
+        return value;
+    }
 	
 	
 	private static boolean isValidInput(String input, int inputFor)
@@ -321,9 +344,13 @@ public class ShopRunner {
 					throw new InvalidMenuSelectionException();
 				break;
 			case 2:
-				input = input.replaceAll("[^\\d.]", "");
 				System.out.println("Verifying |" + input + "|");
-				if(Integer.parseInt(input)>CodeTranslator.totalProducts) //if greater than selectable codes
+				if (!isNumeric(input))
+				{
+					System.out.println("go error");
+					throw new InvalidItemException();
+				}
+				if(!isNumeric(input)||Integer.parseInt(input)>CodeTranslator.totalProducts) //if greater than selectable codes
 					throw new InvalidItemException();
 				else if (input.length()==1)
 					input = "0" + input.toString();
@@ -331,27 +358,31 @@ public class ShopRunner {
 				System.out.println("Input check: " + itemInput);
 				break;
 			case 3:
-				amountInput = input.replaceAll("[^\\d.]", "");
+				if(!isNumeric(input))
+					throw new InvalidQuantityException();
+				amountInput = input;
 				System.out.println("Verifying |" + input + "| to |" + amountInput + "|");
 				int amountAddRequested = Integer.parseInt(amountInput);
 				if(amountAddRequested<=0||amountAddRequested>maxStock||!isValidAddAmount(itemInput, amountAddRequested)) //if input greater than possible amount
 					throw new InvalidQuantityException();
 				break;
 			case 4: //check if input is valid for [Remove] sub-operation
-				amountInput = input.replaceAll("[^\\d.]", "");
+				if(!isNumeric(input))
+					throw new InvalidQuantityException();
+				amountInput = input;
 				System.out.println("Verifying |" + input + "| to |" + amountInput + "|");
 				int amountRemoveRequested = Integer.parseInt(amountInput);
 				if(amountRemoveRequested<=0||amountRemoveRequested>maxStock||!isValidRemoveAmount(itemInput, amountRemoveRequested)) //if input greater than possible amount
 					throw new InvalidRemoveException();
 				break;
 			case 5:
-				if(ShopHelper.getCart().getTotalItemsCount()>0)
-					System.out.println("card card");//continue credit card processing
-				else
-				{
-					System.out.println("wrong card");
-					throw new InvalidCreditCardNumberException();
-				}
+				if((ShopHelper.getCart().getTotalItemsCount()>0)&&(creditCardInput(input)))
+                    System.out.println("card card");//continue credit card processing
+                else
+                {
+                    System.out.println("wrong card");
+                    throw new InvalidCreditCardNumberException();
+                }
 			default:
 				return false;
 				
@@ -390,6 +421,19 @@ public class ShopRunner {
 		else
 			System.out.println("No match in cart found.");
 			return false;
+	}
+	
+	public static boolean isNumeric(String str)  
+	{  
+	  try  
+	  {  
+	    double sample = Double.parseDouble(str);  
+	  }  
+	  catch(NumberFormatException nfe)  
+	  {  
+	    return false;  
+	  }  
+	  return true;  
 	}
 	
 	public static void testRun()

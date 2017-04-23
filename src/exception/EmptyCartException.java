@@ -1,13 +1,13 @@
 package exception;
 
-public class InvalidCheckoutException extends RuntimeException{
+public class EmptyCartException extends RuntimeException{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public InvalidCheckoutException() {
+	public EmptyCartException() {
 		super("Exception: Cannot remove from empty cart.");
 	}
 
