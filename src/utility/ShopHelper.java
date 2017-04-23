@@ -82,6 +82,20 @@ public class ShopHelper {
 			return false;
 	}
 	
+	public boolean processReturn(String productCode, int amount) 
+	{
+		boolean successful = false;
+		String itemCode = CodeTranslator.getProductmap().get(productCode);//translate code into itemCode
+		String productType = itemCode.substring(0, 1);
+		for (int i = 0; i<amount;i++)
+		{
+			System.out.println("Removal check [" + i + "] of [" + amount + "]");
+			getCart().removeItem(ShopHelper.getProduct(productType, itemCode));
+			successful = inventory.putBackItem(itemCode);
+		}
+		return successful;
+	}
+	
 	public static Item getProduct(String type, String code)
 	{
 		if(type.equals("P"))

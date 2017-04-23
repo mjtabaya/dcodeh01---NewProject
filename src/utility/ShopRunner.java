@@ -266,9 +266,7 @@ public class ShopRunner {
 		for (int i = 0; i<amount;i++)
 			{
 				System.out.println("Removal check [" + i + "] of [" + amount + "]");
-				String itemCode = CodeTranslator.getProductmap().get(productCode);//translate code into itemCode
-				String productType = itemCode.substring(0, 1);
-				successfullyRemoved = ShopHelper.getCart().removeItem(ShopHelper.getProduct(productType, itemCode));
+				successfullyRemoved = ShopHelper.getShopHelperInstance().processReturn(productCode, amount);
 				System.out.println("Removal result: " + successfullyRemoved);
 			}
 		return successfullyRemoved;

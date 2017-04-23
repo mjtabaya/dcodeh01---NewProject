@@ -38,6 +38,17 @@ public class Inventory {
 			return false;
 	}
 	
+	public boolean putBackItem(String code)
+	{
+		if (!(this.checkStock(code)>maxStock))
+		{
+			inventoryMap.put(code, inventoryMap.get(code) + 1);
+			return true;
+		}
+		else
+			return false;
+	}
+	
 	public boolean hasStock(String code)
 	{
 		if (inventoryMap.get(code)>0)
