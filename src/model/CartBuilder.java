@@ -5,7 +5,7 @@ import factory.FactoryProducer;
 //used to add package deals to the cart
 public class CartBuilder {
 	
-	public Cart healerSet(Cart cart)
+	public static Cart healerSet(Cart cart)
 	{
 		cart.addItem(FactoryProducer.getFactory("potion").getPotion("P1"));
 		cart.addItem(FactoryProducer.getFactory("potion").getPotion("P1"));
@@ -14,7 +14,7 @@ public class CartBuilder {
 		return cart;
 	}
 	
-	public Cart bufferSet(Cart cart)
+	public static Cart bufferSet(Cart cart)
 	{
 		cart.addItem(FactoryProducer.getFactory("elixir").getPotion("E1"));
 		cart.addItem(FactoryProducer.getFactory("elixir").getPotion("E3"));
@@ -22,7 +22,7 @@ public class CartBuilder {
 		return cart;
 	}
 	
-	public Cart reviverSet(Cart cart)
+	public static Cart reviverSet(Cart cart)
 	{
 		cart.addItem(FactoryProducer.getFactory("elixir").getPotion("E2"));
 		cart.addItem(FactoryProducer.getFactory("elixir").getPotion("E2"));

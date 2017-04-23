@@ -6,8 +6,7 @@ import utility.ShopRunner;
 public class Access {
 	public static void main(String[] args) throws IOException 
 	{
-		ShopRunner.runShop();
-		ShopRunner.testRun();
+		//ShopRunner.testRun();
 		ShopRunner.runShop();
 	}
 

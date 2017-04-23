@@ -11,6 +11,7 @@ import exception.InvalidItemException;
 import exception.InvalidMenuSelectionException;
 import exception.InvalidQuantityException;
 import exception.InvalidRemoveException;
+import model.CartBuilder;
 import view.Display;
 
 public class ShopRunner {
@@ -241,6 +242,7 @@ public class ShopRunner {
 					{
 						System.out.println("Amount verified. Add process commence.");
 						Display.setState(13);
+						System.out.println("amountEntered : " + amountInput);
 						Display.subOperation(amountInput);
 					}
 					else
@@ -434,6 +436,24 @@ public class ShopRunner {
 	    return false;  
 	  }  
 	  return true;  
+	}
+	
+	public static void testBuild(int buildSample)
+	{
+		switch(buildSample)
+		{
+		case 1:
+			CartBuilder.healerSet(ShopHelper.getCart());
+			break;
+		case 2:
+			CartBuilder.bufferSet(ShopHelper.getCart());
+			break;
+		case 3:
+			CartBuilder.reviverSet(ShopHelper.getCart());
+			break;
+		default:
+				System.out.println("Invalid build number for testBuild()");
+		}
 	}
 	
 	public static void testRun()

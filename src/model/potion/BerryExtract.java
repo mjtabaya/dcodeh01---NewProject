@@ -13,9 +13,10 @@ public class BerryExtract extends Potion implements PotionValues{
 		return new BerryExtract();
 	}
 	
+	/*
 	public boolean equals(Object o)
 	{
-		if (!(o instanceof Potion)) 
+		if (!(o instanceof Potion)||!(o instanceof BerryExtract)) 
 		{
 		    return false;
 		}
@@ -26,5 +27,6 @@ public class BerryExtract extends Potion implements PotionValues{
 	public int hashCode() {
 	  return name().hashCode();
 	}
+	*/
 	
 }
