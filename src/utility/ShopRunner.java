@@ -77,13 +77,14 @@ public class ShopRunner {
 							Display.mainOperation(input);
 							break;
 						default:
-							//Display general error
-							break;
+							throw new InvalidOperationInputException();
 					}
 			}
 			catch(InvalidOperationInputException ioie)
 			{
-				//Display ioie.getMessage()
+				System.out.println(ioie.getMessage());
+				Display.setState(04);
+				Display.subOperation("");
 			}
 		}
 		
@@ -102,7 +103,8 @@ public class ShopRunner {
 			catch (InvalidItemException iie)
 			{
 				System.out.println("Input for product code was invalid.");
-				//Display ioie.getMessage()
+				Display.setState(04);
+				Display.subOperation("");
 			}
 		}
 		
@@ -155,8 +157,11 @@ public class ShopRunner {
 				Display.setState(14);
 				subOperation(input);
 			}
-		//else
-			//Display general input error message
+		else
+		{
+			Display.setState(04);
+			Display.subOperation("");
+		}
 		
 	}
 	
@@ -334,7 +339,7 @@ public class ShopRunner {
 		int cartAmount = ShopHelper.getCart().getCount(ShopHelper.getProduct(type, itemCode));
 		boolean result = false;
 		
-		if (cartAmount>(-1))
+		if (cartAmount>(0))
 		{
 			System.out.println("Match in cart found. Amount: " + cartAmount);
 			System.out.println("Amount in cart: " + cartAmount);

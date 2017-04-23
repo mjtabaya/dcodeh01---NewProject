@@ -667,6 +667,10 @@ public class Display {
 	{
 		switch(Display.getState())
 		{
+			case 04:
+				longMessage = "Sorry, we can't do that. Please refer to the commands below: |";
+				Display.setState(0);
+				break;
 			case 12:
 				longMessage = "[" + itemInput + "] " + printItem(itemInput, 0) + " selected. How many to add? |";
 				previousInput = printItem(itemInput, 0);
