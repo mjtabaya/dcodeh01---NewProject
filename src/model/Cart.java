@@ -15,9 +15,15 @@ public class Cart {
 	{
 		items.add(item);
 	}
+	
+	public int getTotalItemsCount()
+	{
+		return items.size();
+	}
 
 	public boolean removeItem(Item item) 
 	{
+		System.out.println("Items in cart is: " + items.size());
 		boolean removed = false;
 		List<Item> found = new ArrayList<Item>();
 		for(Item i : items){

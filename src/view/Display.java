@@ -13,6 +13,7 @@ import utility.ElixirValues;
 import utility.PotionValues;
 import utility.ShopHelper;
 import utility.TrinketValues;
+import model.Inventory;
 
 public class Display {
 	
@@ -23,7 +24,6 @@ public class Display {
 	final static int numElixirTypes = 3;
 	final static int numTrinketTypes = 3;
 	final static int numAllTypes = numPotionTypes + numElixirTypes + numTrinketTypes;
-	
 	
 	//constant variables for general
 	final static int TOTAL_SCREEN_WIDTH = 100;
@@ -137,6 +137,7 @@ public class Display {
 	private static void itemListScreen()
 	{
 		itemCart = ShopHelper.getCart().getItems();
+		
 		final int ITEM_LIST_ROW_COUNT = 20;
 		final int ITEM_LIST_HEADER = 2;
 		final int ITEM_LIST_COLUMN_TITLE = 4;
@@ -181,13 +182,16 @@ public class Display {
 					////////////////////////////// FOR SHOP ITEM LIST /////////////
 					int k = 1;
 					String[] print = PotionValues.toString(type);
+					Inventory inv = new Inventory();
 					
 					for(int j = 1; j <= numAllTypes ; j++)
 					{
+						int stockCount = 0;
 						if(j<=numPotionTypes)
 						{
 							type = "P";
 							type += k;
+							stockCount = inv.checkStock(type);
 							k++;
 							print = PotionValues.toString(type);
 						}
@@ -199,6 +203,7 @@ public class Display {
 							}
 							type = "E";
 							type += k;
+							stockCount = inv.checkStock(type);
 							k++;
 							print = ElixirValues.toString(type);
 						}
@@ -210,11 +215,12 @@ public class Display {
 							}
 							type = "T";
 							type += k;
+							stockCount = inv.checkStock(type);
 							k++;
 							print = TrinketValues.toString(type);
 						}
 						
-						String stringBuild1 = stringLineBuilder(1,CART_ITEM_LIST_COLUMN_FIELD,Integer.parseInt(print[3]),print[0],Integer.parseInt("1"),Double.parseDouble(print[2]));
+						String stringBuild1 = stringLineBuilder(1,CART_ITEM_LIST_COLUMN_FIELD,Integer.parseInt(print[3]),print[0],stockCount,Double.parseDouble(print[2]));
 						
 						////////////////////////////////////////////////////////////////
 						
@@ -650,7 +656,7 @@ public class Display {
 				longMessage = "[DESCRIBE ITEM] selected. Please enter the code of the item you would like. |";
 				break;
 			case "C":
-				longMessage = "You have selected CHECKOUT. |";
+				longMessage = "[CHECKOUT] selected. Please enter your credit card number. |";
 				break;
 			default:
 				longMessage = "Sorry. Wrong input. |";
@@ -691,11 +697,32 @@ public class Display {
 				setState(0);
 				break;
 			case 33:
-				longMessage = "[" + printItem(itemInput, 0) + "]\n" + printItem(itemInput, 1) + "|";
+				longMessage = "[" + printItem(itemInput, 0) + "] " + printItem(itemInput, 1) + " |";
+				setState(0);
+				break;
+			case 341:
+				longMessage = "Empty cart. No items can be removed. |";
 				setState(0);
 				break;
 			case 42:
 				longMessage = "Checking out. Please enter card number |";
+				setState(0);
+				break;
+			case 43:
+				longMessage = "Your card number is " + itemInput + " |";
+				setState(0);
+				break;
+			case 441:
+				longMessage = "Cart is empty. Please add items before checking out. |";
+				setState(0);
+				break;
+			case 442:
+				longMessage = "Invalid card number. |";
+				setState(0);
+				break;
+			case 45:
+				longMessage = "Checking out. Please enter card number |";
+				setState(0);
 				break;
 			default:
 				longMessage = "Sorry. Wrong input. |";

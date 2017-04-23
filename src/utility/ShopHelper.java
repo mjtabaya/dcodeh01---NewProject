@@ -89,7 +89,7 @@ public class ShopHelper {
 		String productType = itemCode.substring(0, 1);
 		for (int i = 0; i<amount;i++)
 		{
-			System.out.println("Removal check [" + i + "] of [" + amount + "]");
+			System.out.println("Removal check [" + (i+1) + "] of [" + amount + "]");
 			getCart().removeItem(ShopHelper.getProduct(productType, itemCode));
 			successful = inventory.putBackItem(itemCode);
 		}

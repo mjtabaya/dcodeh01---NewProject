@@ -5,10 +5,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import exception.InvalidCheckoutException;
 import exception.InvalidCreditCardNumberException;
 import exception.InvalidItemException;
 import exception.InvalidOperationInputException;
 import exception.InvalidQuantityException;
+import exception.InvalidRemoveException;
 import view.Display;
 
 public class ShopRunner {
@@ -24,6 +26,7 @@ public class ShopRunner {
 	static String itemInput = "";
 	static int amountInput = 0;
 	static String cardInput = "";
+	static int cartAmount = 0;
 	static int maxStock = ShopHelper.getShopHelperInstance().getInventory().getMaxStock();
 	static String typeInput = "";
 	
@@ -62,9 +65,16 @@ public class ShopRunner {
 							Display.mainOperation(input);
 							break;
 						case "R":
-							System.out.println("'B' operation confirmed, moving to sub-operation.");
-							Display.setState(2);
-							Display.mainOperation(input);
+							if(ShopHelper.getCart().getTotalItemsCount()<1)
+							{
+								throw new InvalidRemoveException();
+							}
+							else
+							{
+								System.out.println("'B' operation confirmed, moving to sub-operation.");
+								Display.setState(2);
+								Display.mainOperation(input);
+							}
 							break;
 						case "D":
 							System.out.println("'D' operation confirmed, moving to sub-operation.");
@@ -72,9 +82,16 @@ public class ShopRunner {
 							Display.mainOperation(input);
 							break;
 						case "C":
-							System.out.println("'C' operation confirmed, moving to sub-operation.");
-							Display.setState(4);
-							Display.mainOperation(input);
+							if(ShopHelper.getCart().getTotalItemsCount()<1)
+							{
+								throw new InvalidCheckoutException();
+							}
+							else
+							{
+								System.out.println("'C' operation confirmed, moving to sub-operation.");
+								Display.setState(4);
+								Display.mainOperation(input);
+							}
 							break;
 						default:
 							throw new InvalidOperationInputException();
@@ -84,6 +101,18 @@ public class ShopRunner {
 			{
 				System.out.println(ioie.getMessage());
 				Display.setState(04);
+				Display.subOperation("");
+			}
+			catch(InvalidRemoveException ire)
+			{
+				System.out.println(ire.getMessage());
+				Display.setState(341);
+				Display.subOperation("");
+			}
+			catch(InvalidCheckoutException ice)
+			{
+				System.out.println(ice.getMessage());
+				Display.setState(441);
 				Display.subOperation("");
 			}
 		}
@@ -149,13 +178,13 @@ public class ShopRunner {
 		else if (Display.getState()==4)
 			try
 			{
-				if(isValidInput(input,4))
+				if(isValidInput(input,5))
 					subOperation(input);	//pass cardNumber input
 			}
 			catch (InvalidCreditCardNumberException icce)
 			{
-				Display.setState(14);
-				subOperation(input);
+				System.out.println("Invalid [Checkout] detected. " + icce.getMessage());
+				Display.subOperation("441");
 			}
 		else
 		{
@@ -265,7 +294,7 @@ public class ShopRunner {
 		{
 			amount = maxStock;
 		}
-		if (amount <= maxStock)
+		if (amount <= cartAmount)
 		{
 			System.out.println("Confirmed: " + amount + " input is less than stock of [" + maxStock + "]");
 			successfullyRemoved = ShopHelper.getShopHelperInstance().processReturn(productCode, amount);
@@ -280,7 +309,7 @@ public class ShopRunner {
 		return false;
 	}
 	
-	//
+	
 	private static boolean isValidInput(String input, int inputFor)
 	{
 		switch(inputFor)
@@ -291,6 +320,7 @@ public class ShopRunner {
 					throw new InvalidOperationInputException();
 				break;
 			case 2:
+				input = input.replaceAll("[^\\d.]", "");
 				System.out.println("Verifying " + input);
 				if(Integer.parseInt(input)>CodeTranslator.totalProducts) //if greater than selectable codes
 					throw new InvalidItemException();
@@ -300,18 +330,25 @@ public class ShopRunner {
 				System.out.println("Input check: " + itemInput);
 				break;
 			case 3:
+				input = input.replaceAll("[^\\d.]", "");
 				int amountAddRequested = Integer.parseInt(input);
 				if(amountAddRequested<=0||amountAddRequested>maxStock||!isValidAddAmount(itemInput, amountAddRequested)) //if input greater than possible amount
 					throw new InvalidQuantityException();
 				break;
 			case 4:
+				input = input.replaceAll("[^\\d.]", "");
 				int amountRemoveRequested = Integer.parseInt(input);
 				if(amountRemoveRequested<=0||amountRemoveRequested>maxStock||!isValidRemoveAmount(itemInput, amountRemoveRequested)) //if input greater than possible amount
 					throw new InvalidQuantityException();
 				break;
 			case 5:
-				//if invalid credit card format/length return false
-				throw new InvalidCreditCardNumberException();
+				if(ShopHelper.getCart().getTotalItemsCount()>0)
+					System.out.println("card card");//continue credit card processing
+				else
+				{
+					System.out.println("wrong card");
+					throw new InvalidCreditCardNumberException();
+				}
 			default:
 				return false;
 				
@@ -336,7 +373,7 @@ public class ShopRunner {
 		String type = itemCode.substring(0,1);
 		System.out.println("Product Type: ["+ type + "] confirmed. Checking cart match..");
 		
-		int cartAmount = ShopHelper.getCart().getCount(ShopHelper.getProduct(type, itemCode));
+		cartAmount = ShopHelper.getCart().getCount(ShopHelper.getProduct(type, itemCode));
 		boolean result = false;
 		
 		if (cartAmount>(0))
