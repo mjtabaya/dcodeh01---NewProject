@@ -1,13 +1,13 @@
 package exception;
 
-public class InvalidOperationInputException extends RuntimeException{
+public class InvalidMenuSelectionException extends RuntimeException{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public InvalidOperationInputException() {
+	public InvalidMenuSelectionException() {
 		super("Exception: Input not recognized as an operation.");
 	}
 

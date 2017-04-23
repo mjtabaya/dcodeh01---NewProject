@@ -8,7 +8,7 @@ import java.util.List;
 import exception.InvalidCheckoutException;
 import exception.InvalidCreditCardNumberException;
 import exception.InvalidItemException;
-import exception.InvalidOperationInputException;
+import exception.InvalidMenuSelectionException;
 import exception.InvalidQuantityException;
 import exception.InvalidRemoveException;
 import view.Display;
@@ -24,7 +24,7 @@ public class ShopRunner {
 
 	static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	static String itemInput = "";
-	static int amountInput = 0;
+	static String amountInput = "";
 	static String cardInput = "";
 	static int cartAmount = 0;
 	static int maxStock = ShopHelper.getShopHelperInstance().getInventory().getMaxStock();
@@ -94,12 +94,12 @@ public class ShopRunner {
 							}
 							break;
 						default:
-							throw new InvalidOperationInputException();
+							throw new InvalidMenuSelectionException();
 					}
 			}
-			catch(InvalidOperationInputException ioie)
+			catch(InvalidMenuSelectionException imse)
 			{
-				System.out.println(ioie.getMessage());
+				System.out.println(imse.getMessage());
 				Display.setState(04);
 				Display.subOperation("");
 			}
@@ -146,7 +146,7 @@ public class ShopRunner {
 				if(isValidInput(input, 3))
 				{
 					System.out.println("Amount verified. Passing to sub-operation [Add]..");
-					subOperation(input); 	//pass itemAmount input
+					subOperation(amountInput); 	//pass itemAmount input
 				}
 			}
 			catch (InvalidQuantityException iqe)
@@ -165,7 +165,7 @@ public class ShopRunner {
 				if(isValidInput(input, 4))
 				{
 					System.out.println("Amount verified. Passing to sub-operation [Remove]..");
-					subOperation(input); 	//pass itemAmount input
+					subOperation(amountInput); 	//pass itemAmount input
 				}
 			}
 			catch (InvalidQuantityException iqe)
@@ -240,7 +240,7 @@ public class ShopRunner {
 					{
 						System.out.println("Amount verified. Add process commence.");
 						Display.setState(13);
-						Display.subOperation(input);
+						Display.subOperation(amountInput);
 					}
 					else
 					{
@@ -254,7 +254,7 @@ public class ShopRunner {
 					{
 						System.out.println("Amount verified. Remove process commence.");
 						Display.setState(23);
-						Display.subOperation(input);
+						Display.subOperation(amountInput);
 					}
 					else
 					{
@@ -268,7 +268,7 @@ public class ShopRunner {
 					if(addToCart(itemInput, Integer.parseInt(input)))
 					{
 						Display.setState(43);
-						Display.subOperation(input);
+						Display.subOperation(amountInput);
 					}
 					else
 					{
@@ -317,27 +317,29 @@ public class ShopRunner {
 			case 1:
 				String i = input.toUpperCase();
 				if(input.length()>1&&i!="A"&&i!="R"&&i!="D"&&i!="C")
-					throw new InvalidOperationInputException();
+					throw new InvalidMenuSelectionException();
 				break;
 			case 2:
 				input = input.replaceAll("[^\\d.]", "");
-				System.out.println("Verifying " + input);
+				System.out.println("Verifying |" + input + "|");
 				if(Integer.parseInt(input)>CodeTranslator.totalProducts) //if greater than selectable codes
 					throw new InvalidItemException();
 				else if (input.length()==1)
-					input = "0" + input.toString();
-				itemInput = input;
+					amountInput = "0" + input.toString();
+				itemInput = amountInput;
 				System.out.println("Input check: " + itemInput);
 				break;
 			case 3:
-				input = input.replaceAll("[^\\d.]", "");
-				int amountAddRequested = Integer.parseInt(input);
+				amountInput = input.replaceAll("[^\\d.]", "");
+				System.out.println("Verifying |" + input + "| to |" + amountInput + "|");
+				int amountAddRequested = Integer.parseInt(amountInput);
 				if(amountAddRequested<=0||amountAddRequested>maxStock||!isValidAddAmount(itemInput, amountAddRequested)) //if input greater than possible amount
 					throw new InvalidQuantityException();
 				break;
 			case 4:
-				input = input.replaceAll("[^\\d.]", "");
-				int amountRemoveRequested = Integer.parseInt(input);
+				amountInput = input.replaceAll("[^\\d.]", "");
+				System.out.println("Verifying |" + input + "| to |" + amountInput + "|");
+				int amountRemoveRequested = Integer.parseInt(amountInput);
 				if(amountRemoveRequested<=0||amountRemoveRequested>maxStock||!isValidRemoveAmount(itemInput, amountRemoveRequested)) //if input greater than possible amount
 					throw new InvalidQuantityException();
 				break;
