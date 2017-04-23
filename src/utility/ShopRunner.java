@@ -2,6 +2,8 @@ package utility;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import exception.InvalidCreditCardNumberException;
 import exception.InvalidItemException;
@@ -23,6 +25,7 @@ public class ShopRunner {
 	static int amountInput = 0;
 	static String cardInput = "";
 	static int maxStock = ShopHelper.getShopHelperInstance().getInventory().getMaxStock();
+	static String typeInput = "";
 	
 	public static void runShop()
 	{
@@ -92,8 +95,8 @@ public class ShopRunner {
 			{
 				if(isValidInput(input, 2))
 				{
-					System.out.println("Product code verified. Passing to sub-operation..");
-					subOperation(input); //pass itemCode
+					System.out.println("Product code [" + itemInput + "] verified. Passing to sub-operation..");
+					subOperation(itemInput); //pass itemCode
 				}
 			}
 			catch (InvalidItemException iie)
@@ -104,9 +107,9 @@ public class ShopRunner {
 		}
 		
 		//else check if input is for an item amount
-		else if (Display.getState()>10)
+		else if (Display.getState()==12)
 		{
-			System.out.println("Input for amount detected.");
+			System.out.println("Input for [Add] amount detected.");
 			try
 			{
 				if(isValidInput(input, 3))
@@ -117,7 +120,26 @@ public class ShopRunner {
 			}
 			catch (InvalidQuantityException iqe)
 			{
-				System.out.println("Invalid amount detected. " + iqe.getMessage());
+				System.out.println("Invalid [Add] amount detected. " + iqe.getMessage());
+				Display.setState(14);
+				Display.subOperation(input);
+			}
+		}
+
+		else if (Display.getState()==22)
+		{
+			System.out.println("Input for [Remove] amount detected.");
+			try
+			{
+				if(isValidInput(input, 4))
+				{
+					System.out.println("Amount verified. Passing to sub-operation [Remove]..");
+					subOperation(input); 	//pass itemAmount input
+				}
+			}
+			catch (InvalidQuantityException iqe)
+			{
+				System.out.println("Invalid [Remove] amount detected. " + iqe.getMessage());
 				Display.setState(14);
 				Display.subOperation(input);
 			}
@@ -143,21 +165,22 @@ public class ShopRunner {
 	//input could be an itemcode, amount or card number
 	private static void subOperation(String input)
 	{
+		System.out.println("Input code/amount detected. Verifying input..");
+		
 		int suboper = Display.getState(); //checks which state we're in
 		System.out.println("Sub-operation in process. State: " + suboper);
 		
 		if (suboper < 10) //if in A|R|D|C state, +10 set to next phase:amount input or description display
+		{
 			switch(suboper)
 			{
 				case 1:
 					Display.setState(12); 	//set state to add:amount input
-					itemInput = input;		//store itemInput
 					System.out.println("Proceeding to [Add] item process..");
 					Display.subOperation(input);
 					break;
 				case 2:
 					Display.setState(22); 	//set state to remove:amount input
-					itemInput = input;
 					System.out.println("Proceeding to [Remove] item process..");
 					Display.subOperation(input);
 					break;
@@ -171,8 +194,9 @@ public class ShopRunner {
 					Display.subOperation(input);
 					break;
 				default:
-					Display.mainOperation("some kind of error lol");
+					throw new InvalidItemException();
 			}
+		}
 		else
 			System.out.println("Input for amount verified.");
 			switch(suboper)	//input state done, accept amount and try to process
@@ -200,6 +224,7 @@ public class ShopRunner {
 					}
 					else
 					{
+						System.out.println("Removal process for [" + itemInput + "],[" + input + "] encountered a problem.");
 						System.out.println("Invalid amount in sub-operation 13 detected..");
 						Display.setState(24);
 						Display.subOperation(input);
@@ -235,10 +260,11 @@ public class ShopRunner {
 			amount = maxStock;
 		for (int i = 0; i<amount;i++)
 			{
+				System.out.println("Removal check [" + i + "] of [" + amount + "]");
 				String itemCode = CodeTranslator.getProductmap().get(productCode);//translate code into itemCode
 				String productType = itemCode.substring(0, 1);
-				ShopHelper.getShopHelperInstance();
 				successfullyRemoved = ShopHelper.getCart().removeItem(ShopHelper.getProduct(productType, itemCode));
+				System.out.println("Removal result: " + successfullyRemoved);
 			}
 		return successfullyRemoved;
 	}
@@ -260,15 +286,25 @@ public class ShopRunner {
 					throw new InvalidOperationInputException();
 				break;
 			case 2:
+				System.out.println("Verifying " + input);
 				if(Integer.parseInt(input)>CodeTranslator.totalProducts) //if greater than selectable codes
 					throw new InvalidItemException();
+				else if (input.length()==1)
+					input = "0" + input.toString();
+				itemInput = input;
+				System.out.println("Input check: " + itemInput);
 				break;
 			case 3:
-				int amountRequested = Integer.parseInt(input);
-				if(amountRequested<=0||amountRequested>maxStock||!isValidAmount(itemInput, amountRequested)) //if input greater than possible amount
+				int amountAddRequested = Integer.parseInt(input);
+				if(amountAddRequested<=0||amountAddRequested>maxStock||!isValidAddAmount(itemInput, amountAddRequested)) //if input greater than possible amount
 					throw new InvalidQuantityException();
 				break;
 			case 4:
+				int amountRemoveRequested = Integer.parseInt(input);
+				if(amountRemoveRequested<=0||amountRemoveRequested>maxStock||!isValidRemoveAmount(itemInput, amountRemoveRequested)) //if input greater than possible amount
+					throw new InvalidQuantityException();
+				break;
+			case 5:
 				//if invalid credit card format/length return false
 				throw new InvalidCreditCardNumberException();
 			default:
@@ -278,13 +314,37 @@ public class ShopRunner {
 		return true;
 	}
 	
-	private static boolean isValidAmount(String productCode, int amount)
+	private static boolean isValidAddAmount(String productCode, int amount)
 	{
 		String itemCode = CodeTranslator.getProductmap().get(productCode);
-		System.out.println("Checking if [" + amount + "] of [" + itemCode + "] can be processed..");
+		System.out.println("Checking if [" + amount + "] of [" + itemCode + "] can be added..");
 		boolean result = (amount <= ShopHelper.getShopHelperInstance().getInventory().checkStock(itemCode));
 		System.out.println("Result: " + result);
 		return result;
+	}
+	
+	private static boolean isValidRemoveAmount(String productCode, int amount)
+	{
+		String itemCode = CodeTranslator.getProductmap().get(productCode);
+		System.out.println("Checking if [" + amount + "] of [" + itemCode + "] can be removed..");
+		
+		String type = itemCode.substring(0,1);
+		System.out.println("Product Type: ["+ type + "] confirmed. Checking cart match..");
+		
+		int cartAmount = ShopHelper.getCart().getCount(ShopHelper.getProduct(type, itemCode));
+		boolean result = false;
+		
+		if (cartAmount>(-1))
+		{
+			System.out.println("Match in cart found. Amount: " + cartAmount);
+			System.out.println("Amount in cart: " + cartAmount);
+			result = (amount <= cartAmount);
+			System.out.println("isValidRemoveAmount Result: " + result);
+			return true;
+		}
+		else
+			System.out.println("No match in cart found.");
+			return false;
 	}
 	
 	public static void testRun()

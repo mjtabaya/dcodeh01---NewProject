@@ -136,6 +136,7 @@ public class Display {
 	//panel displaying the item lists (shop items and items in cart)
 	private static void itemListScreen()
 	{
+		itemCart = ShopHelper.getCart().getItems();
 		final int ITEM_LIST_ROW_COUNT = 20;
 		final int ITEM_LIST_HEADER = 2;
 		final int ITEM_LIST_COLUMN_TITLE = 4;
@@ -667,7 +668,7 @@ public class Display {
 		switch(Display.getState())
 		{
 			case 12:
-				longMessage = "[" + itemInput + "] " + printItem(itemInput, 0) + " selected. How many would you like? |";
+				longMessage = "[" + itemInput + "] " + printItem(itemInput, 0) + " selected. How many to add? |";
 				previousInput = printItem(itemInput, 0);
 				break;
 			case 13:
@@ -679,7 +680,7 @@ public class Display {
 				Display.setState(1);
 				break;
 			case 22:
-				longMessage = "[" + itemInput + "] "+ printItem(itemInput, 0) + " selected. How many would you like? |";
+				longMessage = "[" + itemInput + "] "+ printItem(itemInput, 0) + " selected. How many to remove? |";
 				break;
 			case 23:
 				longMessage = "Removed [" + itemInput + "] pcs. of [" + previousInput +  "] from the cart. Would there be anything else? |";

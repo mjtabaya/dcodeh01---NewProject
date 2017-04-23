@@ -47,7 +47,7 @@ public class ShopHelper {
 					return false;
 			else if(type.contentEquals("E"))
 				if(inventory.hasStock(input))
-					for (i=0; i<=amount; i++)
+					for (i=0; i<amount; i++)
 						successful = addToCart(type,input);
 				else
 					return false;

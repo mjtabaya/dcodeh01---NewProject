@@ -15,11 +15,34 @@ public class Cart {
 	{
 		items.add(item);
 	}
-	
+
 	public boolean removeItem(Item item) 
 	{
+		boolean removed = false;
+		List<Item> found = new ArrayList<Item>();
+		for(Item i : items){
+		    if(i.name().equals(item.name()))
+		    {
+		        found.add(i);
+		        removed = true;
+		        break;
+		    }
+		}
+		items.remove(found);
+		return removed;
+	}
+	/*
+	public boolean removeItem(Item item) 
+	{
+		System.out.println("Cart contents");
+		for(Item checkContent : items)
+		{
+			System.out.println(checkContent.getClass());
+		}
+		System.out.println("Removing " + item.getClass()  + " in Cart.removeItem..");
 		return items.remove(item.getClass());
 	}
+	*/
 	
 	public float getCost()
 	{
