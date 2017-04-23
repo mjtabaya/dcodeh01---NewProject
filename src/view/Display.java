@@ -290,7 +290,7 @@ public class Display {
    
     private static void messageScreen(String message)
     {
-    	final int MESSAGE_SCREEN_ROW_COUNT = 7;
+        final int MESSAGE_SCREEN_ROW_COUNT = 7;
         final int MESSAGE_SLOT = TOTAL_SCREEN_WIDTH - 14;
        
         char[] messageArray = message.toCharArray();  
@@ -376,7 +376,7 @@ public class Display {
                         }
                         break;
                     default:
-                    	for(; (j <= MESSAGE_SLOT*4)&&(j > MESSAGE_SLOT*3); j++)
+                        for(; (j <= MESSAGE_SLOT*4)&&(j > MESSAGE_SLOT*3); j++)
                         {
                             for(; (displayMessage.length()<=MESSAGE_SLOT)&&(m<words.length-1) ; m++)
                             {
@@ -400,6 +400,32 @@ public class Display {
     {
         final int INPUT_SCREEN_ROW_COUNT = 6;
        
+        String shopStateString = Integer.toString(shopState);
+        char[] shopStateArray =  shopStateString.toCharArray();
+       
+        String inputPrompt = "";
+       
+        if(shopStateArray[0] == '4')
+        {
+            inputPrompt = "PLEASE ENTER CARD NUMBER";
+        }
+        else
+        {
+            if(shopState < 10 && shopState !=0)
+            {
+                inputPrompt = " PLEASE ENTER ITEM CODE";
+            }
+            else if(shopState > 10 && shopState < 100)
+            {
+                inputPrompt = " PLEASE ENTER AN AMOUNT";
+            }
+            else
+            {
+                inputPrompt = "PLEASE SELECT AN OPTION";
+            }
+        }
+       
+       
         for(int i=0; i < INPUT_SCREEN_ROW_COUNT ; i++)
         {
             if(i==0)
@@ -416,7 +442,7 @@ public class Display {
             }
             else if(i==INPUT_SCREEN_ROW_COUNT-1)
             {
-                System.out.format("%85s", "===================================================     PLEASE SELECT AN OPTION:     ");
+                System.out.format("%85s", "===================================================     " + inputPrompt + ":     ");
             }
             else
             {
@@ -432,6 +458,28 @@ public class Display {
     //used by itemListScreen to build a formatted string per line
     private static String stringLineBuilder(int column, int field, int itemCode, String itemName, int itemCount, double itemPrice)
     {
+        String shopStateString = Integer.toString(shopState);
+        char[] shopStateArray =  shopStateString.toCharArray();
+       
+        if(shopStateArray[0]=='0')
+        {
+            itemCode = -1;
+        }
+        else if(shopStateArray[0]=='2')
+        {
+            if(column==1)
+            {
+                itemCode = -1;
+            }
+        }
+        else if(shopStateArray[0]=='1')
+        {
+            if(column==2)
+            {
+                itemCode = -1;
+            }
+        }
+       
         String value = "";
         DecimalFormat two = new DecimalFormat("0.00");
        
@@ -452,7 +500,12 @@ public class Display {
                 {
                     if(itemCodeString.length()>j)
                     {
-                        if(itemCode<10)
+                        if(itemCode<0)
+                        {
+                            value+= "  ";
+                            i++;
+                        }
+                        else if(itemCode>0 && itemCode<10)
                         {
                             value+= "0";
                             i++;
@@ -538,6 +591,29 @@ public class Display {
     //used by itemListScreen to build a formatted string per line (this one is overloaded)
     private static String stringLineBuilder(int column, int field, String string1, String string2, String string3, String string4)
     {
+       
+        String shopStateString = Integer.toString(shopState);
+        char[] shopStateArray =  shopStateString.toCharArray();
+       
+        if(shopStateArray[0]=='0')
+        {
+            string1 = "    ";
+        }
+        else if(shopStateArray[0]=='2')
+        {
+            if(column==1)
+            {
+                string1 = "    ";
+            }
+        }
+        else if(shopStateArray[0]=='1')
+        {
+            if(column==2)
+            {
+                string1 = "    ";
+            }
+        }
+       
         String value = "";
  
         char[] string1Array =  string1.toCharArray();
