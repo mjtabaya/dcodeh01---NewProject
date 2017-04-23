@@ -24,11 +24,10 @@ public class Cart {
 		    if(i.name().equals(item.name()))
 		    {
 		        found.add(i);
-		        removed = true;
+		        removed = items.remove(i);
 		        break;
 		    }
 		}
-		items.remove(found);
 		return removed;
 	}
 	/*

@@ -262,13 +262,15 @@ public class ShopRunner {
 	{
 		boolean successfullyRemoved = false;
 		if (amount > maxStock)
+		{
 			amount = maxStock;
-		for (int i = 0; i<amount;i++)
-			{
-				System.out.println("Removal check [" + i + "] of [" + amount + "]");
-				successfullyRemoved = ShopHelper.getShopHelperInstance().processReturn(productCode, amount);
-				System.out.println("Removal result: " + successfullyRemoved);
-			}
+		}
+		if (amount <= maxStock)
+		{
+			System.out.println("Confirmed: " + amount + " input is less than stock of [" + maxStock + "]");
+			successfullyRemoved = ShopHelper.getShopHelperInstance().processReturn(productCode, amount);
+		}
+		System.out.println("Removal result: " + successfullyRemoved);
 		return successfullyRemoved;
 	}
 	
