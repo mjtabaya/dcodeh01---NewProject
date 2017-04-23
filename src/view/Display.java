@@ -3,8 +3,12 @@ package view;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import exception.InvalidItemException;
+
 import java.io.IOException;
 
+import utility.CodeTranslator;
 import utility.ElixirValues;
 import utility.PotionValues;
 import utility.ShopHelper;
@@ -12,6 +16,7 @@ import utility.TrinketValues;
 
 public class Display {
 	
+	static String previousInput = "";
 	static boolean shopOpen = true;
 	static int shopState = 0;
 	final static int numPotionTypes = 3;
@@ -635,13 +640,13 @@ public class Display {
 		switch(input)
 		{
 			case "A":
-				longMessage = "You have selected ADD ITEM. |";
+				longMessage = "[ADD ITEM] selected. Please enter the code of the item you would like. |";
 				break;
 			case "R":
-				longMessage = "You have selected REMOVE ITEM. |";
+				longMessage = "[REMOVE ITEM] selected. Please enter the code of the item you would like. |";
 				break;
 			case "D":
-				longMessage = "You have selected DESCRIBE ITEM. |";
+				longMessage = "[DESCRIBE ITEM] selected. Please enter the code of the item you would like. |";
 				break;
 			case "C":
 				longMessage = "You have selected CHECKOUT. |";
@@ -662,19 +667,22 @@ public class Display {
 		switch(Display.getState())
 		{
 			case 12:
-				longMessage = "Add " + itemInput + "to cart. Enter Amount |";
+				longMessage = "[" + itemInput + "] " + printItem(itemInput) + " selected. How many would you like? |";
+				previousInput = printItem(itemInput);
+				break;
+			case 13:
+				longMessage = "Added [" + itemInput + "] pcs. of " + previousInput +  " to the cart. Would there be anything else? |";
+				setState(0);
 				break;
 			case 22:
-				longMessage = "Remove " + itemInput + "from cart. Enter Amount |";
+				longMessage = "[" + itemInput + "] "+ printItem(itemInput) + " selected. How many would you like? |";
+				break;
+			case 23:
+				longMessage = "Removed [" + itemInput + "] pcs. of " + previousInput +  " from the cart. Would there be anything else? |";
+				setState(0);
 				break;
 			case 42:
 				longMessage = "Checking out. Please enter card number |";
-				break;
-			case 51:
-				longMessage = "Item added to cart successfully. |";
-				break;
-			case 52:
-				longMessage = "Item removed from cart successfully. |";
 				break;
 			default:
 				longMessage = "Sorry. Wrong input. |";
@@ -685,6 +693,23 @@ public class Display {
 		{screenBuilder();} 
 		catch (IOException e) 
 		{longMessage = e.getMessage();}
+	}
+	
+	private static String printItem(String productCode)
+	{
+		String itemCode = CodeTranslator.getProductmap().get(productCode);
+		String type = itemCode.substring(0, 1); //expected P, E or T
+		switch(type)
+		{
+			case "P":
+				return PotionValues.toString(itemCode)[0];
+			case "E":
+				return ElixirValues.toString(itemCode)[0];
+			case "T":
+				return TrinketValues.toString(itemCode)[0];
+			default:
+				throw new InvalidItemException();
+		}
 	}
 	
 	public static void displayItem(String itemInput)

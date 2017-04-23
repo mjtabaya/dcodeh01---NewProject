@@ -6,18 +6,21 @@ import java.util.Map;
 public class CodeTranslator {
 	static final int totalProducts = 9;
 	
-	static final Map<String, String> productMap = new HashMap<String, String>();
+	private static final Map<String, String> productMap = new HashMap<String, String>();
 	static
 	{
-		productMap.put("01", "P1");
-		productMap.put("02", "P2");
-		productMap.put("03", "P3");
-		productMap.put("04", "E1");
-		productMap.put("05", "E2");
-		productMap.put("06", "E3");
-		productMap.put("07", "T1");
-		productMap.put("08", "T2");
-		productMap.put("09", "T3");
+		getProductmap().put("01", "P1");
+		getProductmap().put("02", "P2");
+		getProductmap().put("03", "P3");
+		getProductmap().put("04", "E1");
+		getProductmap().put("05", "E2");
+		getProductmap().put("06", "E3");
+		getProductmap().put("07", "T1");
+		getProductmap().put("08", "T2");
+		getProductmap().put("09", "T3");
+	}
+	public static Map<String, String> getProductmap() {
+		return productMap;
 	}
 
 

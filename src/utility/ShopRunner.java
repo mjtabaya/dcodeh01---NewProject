@@ -33,10 +33,7 @@ public class ShopRunner {
 			while(Display.isOpen())
 			{
 				String input = reader.readLine();
-				if(isValidInput(input, 1))
-					shopOperation(input.toUpperCase());
-				//else
-					//Display general input error message
+				shopOperation(input.toUpperCase());
 			}
 		}
 		
@@ -48,6 +45,7 @@ public class ShopRunner {
 	
 	public static void shopOperation(String input)
 	{
+		System.out.println(input);
 		if(!input.matches(".*\\d+.*")) //does not contain numbers, it's an operator else an invalid input
 		{
 			try
@@ -137,16 +135,20 @@ public class ShopRunner {
 				case 1:
 					Display.setState(12); 	//set state to add:amount input
 					itemInput = input;		//store itemInput
+					Display.subOperation(input);
 					break;
 				case 2:
 					Display.setState(22); 	//set state to remove:amount input
 					itemInput = input;
+					Display.subOperation(input);
 					break;
 				case 3:
 					Display.setState(33); 	//display successful state?
+					Display.subOperation(input);
 					break;
 				case 4:
 					Display.setState(42);	//set state to credit card input
+					Display.subOperation(input);
 					break;
 				default:
 					Display.mainOperation("some kind of error lol");
@@ -156,28 +158,47 @@ public class ShopRunner {
 			{
 				case 12:
 					if(addToCart(itemInput, Integer.parseInt(input)))
+					{
 						Display.setState(13);
+						Display.subOperation(input);
+					}
 					else
+					{
 						Display.setState(14);
+						Display.subOperation(input);
+					}
 					break;
 				case 22:
 					if(removeFromCart(itemInput, Integer.parseInt(input)))
+					{
 						Display.setState(23);
+						Display.subOperation(input);
+					}
 					else
+					{
 						Display.setState(24);
+						Display.subOperation(input);
+					}
 					break;
 				case 42:
 					if(addToCart(itemInput, Integer.parseInt(input)))
+					{
 						Display.setState(43);
+						Display.subOperation(input);
+					}
 					else
+					{
 						Display.setState(44);
+						Display.subOperation(input);
+					}
 					Display.setIsOpen(false); //card input successful, stop demo
 					break;
 			}
 	}
 	
-	private static boolean addToCart(String itemCode, int amount)
+	private static boolean addToCart(String productCode, int amount)
 	{
+		String itemCode = CodeTranslator.getProductmap().get(productCode);
 		return ShopHelper.getShopHelperInstance().processItem(itemCode, amount);
 	}
 	
@@ -188,7 +209,7 @@ public class ShopRunner {
 			amount = maxStock;
 		for (int i = 0; i<amount;i++)
 			{
-				String product = CodeTranslator.productMap.get(itemCode);//translate code into productcode
+				String product = CodeTranslator.getProductmap().get(itemCode);//translate code into productcode
 				String productType = product.substring(0, 1);
 				ShopHelper.getShopHelperInstance();
 				successfullyRemoved = ShopHelper.getCart().removeItem(ShopHelper.getProduct(productType, product));
@@ -208,17 +229,23 @@ public class ShopRunner {
 		switch(inputFor)
 		{
 			case 1:
-				if(input.length()>1||input!="A"||input!="R"||input!="D"||input!="C")
+				String i = input.toUpperCase();
+				if(input.length()>1&&i!="A"&&i!="R"&&i!="D"&&i!="C")
 					throw new InvalidOperationInputException();
+				break;
 			case 2:
 				if(Integer.parseInt(input)>CodeTranslator.totalProducts) //if greater than selectable codes
 					throw new InvalidItemException();
+				break;
 			case 3:
 				if(Integer.parseInt(input)>maxStock) //if input greater than possible amount
 					throw new InvalidQuantityException();
+				break;
 			case 4:
 				//if invalid credit card format/length return false
 				throw new InvalidCreditCardNumberException();
+			default:
+				return false;
 				
 		}
 		return true;
