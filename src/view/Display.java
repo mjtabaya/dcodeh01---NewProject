@@ -667,18 +667,26 @@ public class Display {
 		switch(Display.getState())
 		{
 			case 12:
-				longMessage = "[" + itemInput + "] " + printItem(itemInput) + " selected. How many would you like? |";
-				previousInput = printItem(itemInput);
+				longMessage = "[" + itemInput + "] " + printItem(itemInput, 0) + " selected. How many would you like? |";
+				previousInput = printItem(itemInput, 0);
 				break;
 			case 13:
 				longMessage = "Added [" + itemInput + "] pcs. of " + previousInput +  " to the cart. Would there be anything else? |";
 				setState(0);
 				break;
+			case 14:
+				longMessage = "Sorry, we don't have that much. |";
+				Display.setState(1);
+				break;
 			case 22:
-				longMessage = "[" + itemInput + "] "+ printItem(itemInput) + " selected. How many would you like? |";
+				longMessage = "[" + itemInput + "] "+ printItem(itemInput, 0) + " selected. How many would you like? |";
 				break;
 			case 23:
-				longMessage = "Removed [" + itemInput + "] pcs. of " + previousInput +  " from the cart. Would there be anything else? |";
+				longMessage = "Removed [" + itemInput + "] pcs. of [" + previousInput +  "] from the cart. Would there be anything else? |";
+				setState(0);
+				break;
+			case 33:
+				longMessage = "[" + printItem(itemInput, 0) + "]\n" + printItem(itemInput, 1) + "|";
 				setState(0);
 				break;
 			case 42:
@@ -695,18 +703,18 @@ public class Display {
 		{longMessage = e.getMessage();}
 	}
 	
-	private static String printItem(String productCode)
+	private static String printItem(String productCode, int itemPart)
 	{
 		String itemCode = CodeTranslator.getProductmap().get(productCode);
 		String type = itemCode.substring(0, 1); //expected P, E or T
 		switch(type)
 		{
 			case "P":
-				return PotionValues.toString(itemCode)[0];
+				return PotionValues.toString(itemCode)[itemPart];
 			case "E":
-				return ElixirValues.toString(itemCode)[0];
+				return ElixirValues.toString(itemCode)[itemPart];
 			case "T":
-				return TrinketValues.toString(itemCode)[0];
+				return TrinketValues.toString(itemCode)[itemPart];
 			default:
 				throw new InvalidItemException();
 		}

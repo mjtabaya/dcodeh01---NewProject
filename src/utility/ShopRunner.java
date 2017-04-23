@@ -45,7 +45,7 @@ public class ShopRunner {
 	
 	public static void shopOperation(String input)
 	{
-		System.out.println(input);
+		System.out.println("Checking shop operation for: " + input);
 		if(!input.matches(".*\\d+.*")) //does not contain numbers, it's an operator else an invalid input
 		{
 			try
@@ -54,18 +54,22 @@ public class ShopRunner {
 					switch(input)
 					{
 						case "A":
+							System.out.println("'A' operation confirmed, moving to sub-operation.");
 							Display.setState(1);
 							Display.mainOperation(input);
 							break;
 						case "R":
+							System.out.println("'B' operation confirmed, moving to sub-operation.");
 							Display.setState(2);
 							Display.mainOperation(input);
 							break;
 						case "D":
+							System.out.println("'D' operation confirmed, moving to sub-operation.");
 							Display.setState(3);
 							Display.mainOperation(input);
 							break;
 						case "C":
+							System.out.println("'C' operation confirmed, moving to sub-operation.");
 							Display.setState(4);
 							Display.mainOperation(input);
 							break;
@@ -83,30 +87,41 @@ public class ShopRunner {
 		//else check if input is for an item code
 		else if(Display.getState()!=4&&Display.getState()<10)
 		{
+			System.out.println("Input for product code detected.");
 			try
 			{
 				if(isValidInput(input, 2))
 				{
+					System.out.println("Product code verified. Passing to sub-operation..");
 					subOperation(input); //pass itemCode
 				}
 			}
 			catch (InvalidItemException iie)
 			{
+				System.out.println("Input for product code was invalid.");
 				//Display ioie.getMessage()
 			}
 		}
 		
 		//else check if input is for an item amount
 		else if (Display.getState()>10)
+		{
+			System.out.println("Input for amount detected.");
 			try
 			{
 				if(isValidInput(input, 3))
+				{
+					System.out.println("Amount verified. Passing to sub-operation [Add]..");
 					subOperation(input); 	//pass itemAmount input
+				}
 			}
 			catch (InvalidQuantityException iqe)
 			{
-				//Display iqe.getMessage()
+				System.out.println("Invalid amount detected. " + iqe.getMessage());
+				Display.setState(14);
+				Display.subOperation(input);
 			}
+		}
 		else if (Display.getState()==4)
 			try
 			{
@@ -115,7 +130,8 @@ public class ShopRunner {
 			}
 			catch (InvalidCreditCardNumberException icce)
 			{
-				//Display icce.getMessage()
+				Display.setState(14);
+				subOperation(input);
 			}
 		//else
 			//Display general input error message
@@ -128,6 +144,7 @@ public class ShopRunner {
 	private static void subOperation(String input)
 	{
 		int suboper = Display.getState(); //checks which state we're in
+		System.out.println("Sub-operation in process. State: " + suboper);
 		
 		if (suboper < 10) //if in A|R|D|C state, +10 set to next phase:amount input or description display
 			switch(suboper)
@@ -135,15 +152,18 @@ public class ShopRunner {
 				case 1:
 					Display.setState(12); 	//set state to add:amount input
 					itemInput = input;		//store itemInput
+					System.out.println("Proceeding to [Add] item process..");
 					Display.subOperation(input);
 					break;
 				case 2:
 					Display.setState(22); 	//set state to remove:amount input
 					itemInput = input;
+					System.out.println("Proceeding to [Remove] item process..");
 					Display.subOperation(input);
 					break;
 				case 3:
 					Display.setState(33); 	//display successful state?
+					System.out.println("Proceeding to [Display] item process..");
 					Display.subOperation(input);
 					break;
 				case 4:
@@ -154,16 +174,19 @@ public class ShopRunner {
 					Display.mainOperation("some kind of error lol");
 			}
 		else
+			System.out.println("Input for amount verified.");
 			switch(suboper)	//input state done, accept amount and try to process
 			{
 				case 12:
 					if(addToCart(itemInput, Integer.parseInt(input)))
 					{
+						System.out.println("Amount verified. Add process commence.");
 						Display.setState(13);
 						Display.subOperation(input);
 					}
 					else
 					{
+						System.out.println("Invalid amount in sub-operation 12 detected..");
 						Display.setState(14);
 						Display.subOperation(input);
 					}
@@ -171,11 +194,13 @@ public class ShopRunner {
 				case 22:
 					if(removeFromCart(itemInput, Integer.parseInt(input)))
 					{
+						System.out.println("Amount verified. Remove process commence.");
 						Display.setState(23);
 						Display.subOperation(input);
 					}
 					else
 					{
+						System.out.println("Invalid amount in sub-operation 13 detected..");
 						Display.setState(24);
 						Display.subOperation(input);
 					}
@@ -199,20 +224,21 @@ public class ShopRunner {
 	private static boolean addToCart(String productCode, int amount)
 	{
 		String itemCode = CodeTranslator.getProductmap().get(productCode);
-		return ShopHelper.getShopHelperInstance().processItem(itemCode, amount);
+		System.out.println("Adding [" + amount + "] of [" + itemCode + "] to cart.");
+		return ShopHelper.getShopHelperInstance().processOrder(itemCode, amount);
 	}
 	
-	private static boolean removeFromCart(String itemCode, int amount)
+	private static boolean removeFromCart(String productCode, int amount)
 	{
 		boolean successfullyRemoved = false;
 		if (amount > maxStock)
 			amount = maxStock;
 		for (int i = 0; i<amount;i++)
 			{
-				String product = CodeTranslator.getProductmap().get(itemCode);//translate code into productcode
-				String productType = product.substring(0, 1);
+				String itemCode = CodeTranslator.getProductmap().get(productCode);//translate code into itemCode
+				String productType = itemCode.substring(0, 1);
 				ShopHelper.getShopHelperInstance();
-				successfullyRemoved = ShopHelper.getCart().removeItem(ShopHelper.getProduct(productType, product));
+				successfullyRemoved = ShopHelper.getCart().removeItem(ShopHelper.getProduct(productType, itemCode));
 			}
 		return successfullyRemoved;
 	}
@@ -238,7 +264,8 @@ public class ShopRunner {
 					throw new InvalidItemException();
 				break;
 			case 3:
-				if(Integer.parseInt(input)>maxStock) //if input greater than possible amount
+				int amountRequested = Integer.parseInt(input);
+				if(amountRequested<=0||amountRequested>maxStock||!isValidAmount(itemInput, amountRequested)) //if input greater than possible amount
 					throw new InvalidQuantityException();
 				break;
 			case 4:
@@ -251,22 +278,31 @@ public class ShopRunner {
 		return true;
 	}
 	
+	private static boolean isValidAmount(String productCode, int amount)
+	{
+		String itemCode = CodeTranslator.getProductmap().get(productCode);
+		System.out.println("Checking if [" + amount + "] of [" + itemCode + "] can be processed..");
+		boolean result = (amount <= ShopHelper.getShopHelperInstance().getInventory().checkStock(itemCode));
+		System.out.println("Result: " + result);
+		return result;
+	}
+	
 	public static void testRun()
 	{
-		ShopHelper.getShopHelperInstance().processItem("P1", 2);
-		ShopHelper.getShopHelperInstance().processItem("P2", 3);
-		ShopHelper.getShopHelperInstance().processItem("P3", 4);
-		ShopHelper.getShopHelperInstance().processItem("E1", 5);
-		ShopHelper.getShopHelperInstance().processItem("E2", 6);
-		ShopHelper.getShopHelperInstance().processItem("E3", 7);
-		ShopHelper.getShopHelperInstance().processItem("T1", 8);
-		ShopHelper.getShopHelperInstance().processItem("T2", 9);
-		ShopHelper.getShopHelperInstance().processItem("T3", 10);
+		ShopHelper.getShopHelperInstance().processOrder("P1", 2);
+		ShopHelper.getShopHelperInstance().processOrder("P2", 3);
+		ShopHelper.getShopHelperInstance().processOrder("P3", 4);
+		ShopHelper.getShopHelperInstance().processOrder("E1", 5);
+		ShopHelper.getShopHelperInstance().processOrder("E2", 6);
+		ShopHelper.getShopHelperInstance().processOrder("E3", 7);
+		ShopHelper.getShopHelperInstance().processOrder("T1", 8);
+		ShopHelper.getShopHelperInstance().processOrder("T2", 9);
+		ShopHelper.getShopHelperInstance().processOrder("T3", 10);
 
 		//second reorders
-		ShopHelper.getShopHelperInstance().processItem("P1", 2); //should return total 4 of P1
-		ShopHelper.getShopHelperInstance().processItem("P2", 3); //which they do, thus
-		ShopHelper.getShopHelperInstance().processItem("P3", 4); 
+		ShopHelper.getShopHelperInstance().processOrder("P1", 2); //should return total 4 of P1
+		ShopHelper.getShopHelperInstance().processOrder("P2", 3); //which they do, thus
+		ShopHelper.getShopHelperInstance().processOrder("P3", 4); 
 		//ordering the same item regardless of the amount works
 		
 		

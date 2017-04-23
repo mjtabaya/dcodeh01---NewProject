@@ -28,8 +28,10 @@ public class ShopHelper {
 	public static ShopHelper getShopHelperInstance() 
 	{return (sh==null) ? sh = new ShopHelper(): sh;}
 	
-	public boolean processItem(String input, int amount)
+	public boolean processOrder(String input, int amount)
 	{
+		System.out.println("Inventory stock: " + inventory.checkStock(input));
+		System.out.println("Amount requested: " + amount);
 		//********use this sysout to verify input and amount parameters**************//
 		//********System.out.println(input + " amount: " + Integer.toString(amount));//
 		String type = input.substring(0, 1); //expected P, E or T
@@ -38,14 +40,23 @@ public class ShopHelper {
 		{
 			int i =0;
 			if(type.contentEquals("P"))
-				for (i=0; i<amount; i++)
-					successful = addToCart(type,input);
+				if(inventory.hasStock(input)&&amount<=inventory.checkStock(input))
+					for (i=0; i<amount; i++)
+						successful = addToCart(type,input);
+				else
+					return false;
 			else if(type.contentEquals("E"))
-				for (i=0; i<amount; i++)
-					successful = addToCart(type,input);
+				if(inventory.hasStock(input))
+					for (i=0; i<=amount; i++)
+						successful = addToCart(type,input);
+				else
+					return false;
 			else if(type.contentEquals("T"))
-				for (i=0; i<amount; i++)
-					successful = addToCart(type,input);
+				if(inventory.hasStock(input))
+					for (i=0; i<amount; i++)
+						successful = addToCart(type,input);
+				else
+					return false;
 			else
 				throw new InvalidItemException();
 		}
