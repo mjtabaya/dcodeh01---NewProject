@@ -669,7 +669,7 @@ public class Display {
 		{longMessage = e.getMessage();}
 	}
 	
-	public static void subOperation(String itemInput)
+	public static void subOperation(String operationInput)
 	{
 		switch(Display.getState())
 		{
@@ -678,11 +678,11 @@ public class Display {
 				Display.setState(0);
 				break;
 			case 12:
-				longMessage = "[" + itemInput + "] " + printItem(itemInput, 0) + " selected. How many to add? |";
-				previousInput = printItem(itemInput, 0);
+				longMessage = "[" + operationInput + "] " + printItem(operationInput, 0) + " selected. How many to add? |";
+				previousInput = printItem(operationInput, 0);
 				break;
 			case 13:
-				longMessage = "Added [" + itemInput + "] pcs. of " + previousInput +  " to the cart. Would there be anything else? |";
+				longMessage = "Added [" + operationInput + "] pcs. of " + previousInput +  " to the cart. Would there be anything else? |";
 				setState(0);
 				break;
 			case 14:
@@ -690,14 +690,18 @@ public class Display {
 				Display.setState(1);
 				break;
 			case 22:
-				longMessage = "[" + itemInput + "] "+ printItem(itemInput, 0) + " selected. How many to remove? |";
+				longMessage = "[" + operationInput + "] "+ printItem(operationInput, 0) + " selected. How many to remove? |";
 				break;
 			case 23:
-				longMessage = "Removed [" + itemInput + "] pcs. of [" + previousInput +  "] from the cart. Would there be anything else? |";
+				longMessage = "Removed [" + operationInput + "] pcs. of [" + previousInput +  "] from the cart. Would there be anything else? |";
+				setState(0);
+				break;
+			case 241:
+				longMessage = "Cannot remove " + operationInput + " of the selected item from the cart. |";
 				setState(0);
 				break;
 			case 33:
-				longMessage = "[" + printItem(itemInput, 0) + "] " + printItem(itemInput, 1) + " |";
+				longMessage = "[" + printItem(operationInput, 0) + "] " + printItem(operationInput, 1) + " |";
 				setState(0);
 				break;
 			case 341:
@@ -709,7 +713,7 @@ public class Display {
 				setState(0);
 				break;
 			case 43:
-				longMessage = "Your card number is " + itemInput + " |";
+				longMessage = "Your card number is " + operationInput + " |";
 				setState(0);
 				break;
 			case 441:

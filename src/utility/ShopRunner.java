@@ -168,10 +168,10 @@ public class ShopRunner {
 					subOperation(amountInput); 	//pass itemAmount input
 				}
 			}
-			catch (InvalidQuantityException iqe)
+			catch (InvalidRemoveException ire)
 			{
-				System.out.println("Invalid [Remove] amount detected. " + iqe.getMessage());
-				Display.setState(14);
+				System.out.println("Invalid [Remove] amount detected. " + ire.getMessage());
+				Display.setState(241);
 				Display.subOperation(input);
 			}
 		}
@@ -184,7 +184,8 @@ public class ShopRunner {
 			catch (InvalidCreditCardNumberException icce)
 			{
 				System.out.println("Invalid [Checkout] detected. " + icce.getMessage());
-				Display.subOperation("441");
+				Display.setState(441);
+				Display.subOperation("");
 			}
 		else
 		{
@@ -325,8 +326,8 @@ public class ShopRunner {
 				if(Integer.parseInt(input)>CodeTranslator.totalProducts) //if greater than selectable codes
 					throw new InvalidItemException();
 				else if (input.length()==1)
-					amountInput = "0" + input.toString();
-				itemInput = amountInput;
+					input = "0" + input.toString();
+				itemInput = input;
 				System.out.println("Input check: " + itemInput);
 				break;
 			case 3:
@@ -336,12 +337,12 @@ public class ShopRunner {
 				if(amountAddRequested<=0||amountAddRequested>maxStock||!isValidAddAmount(itemInput, amountAddRequested)) //if input greater than possible amount
 					throw new InvalidQuantityException();
 				break;
-			case 4:
+			case 4: //check if input is valid for [Remove] sub-operation
 				amountInput = input.replaceAll("[^\\d.]", "");
 				System.out.println("Verifying |" + input + "| to |" + amountInput + "|");
 				int amountRemoveRequested = Integer.parseInt(amountInput);
 				if(amountRemoveRequested<=0||amountRemoveRequested>maxStock||!isValidRemoveAmount(itemInput, amountRemoveRequested)) //if input greater than possible amount
-					throw new InvalidQuantityException();
+					throw new InvalidRemoveException();
 				break;
 			case 5:
 				if(ShopHelper.getCart().getTotalItemsCount()>0)
@@ -384,7 +385,7 @@ public class ShopRunner {
 			System.out.println("Amount in cart: " + cartAmount);
 			result = (amount <= cartAmount);
 			System.out.println("isValidRemoveAmount Result: " + result);
-			return true;
+			return result;
 		}
 		else
 			System.out.println("No match in cart found.");
