@@ -3,12 +3,10 @@ package model;
 import java.util.HashMap;
 import java.util.Map;
 
-import utility.PotionValues;
-
-public class Inventory implements PotionValues{
+public class Inventory {
 	private static int maxStock = 10;
 	
-	final static Map<String, Integer> inventoryMap = new HashMap<String, Integer>() 
+	private final static Map<String, Integer> inventoryMap = new HashMap<String, Integer>() 
 	{
 		//don't mind this id
 		private static final long serialVersionUID = 3L;

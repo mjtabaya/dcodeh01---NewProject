@@ -28,12 +28,6 @@ public class ShopHelper {
 	public static ShopHelper getShopHelperInstance() 
 	{return (sh==null) ? sh = new ShopHelper(): sh;}
 	
-	public String inputToCode(String input)
-	{
-		return null;
-	}
-	
-	
 	public boolean processItem(String input, int amount)
 	{
 		//********use this sysout to verify input and amount parameters**************//

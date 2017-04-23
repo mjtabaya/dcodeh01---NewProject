@@ -8,13 +8,6 @@ public abstract class Potion implements Item, Cloneable
 	private final double price;
 	private final int code;
 	
-//	public Potion(String name, String description, double price)
-//	{
-//		this.name = name;
-//		this.description = description;
-//		this.price = price;
-//	}
-	
 	public Potion(String name, String description, double price, int code)
 	{
 		this.name = name;
