@@ -53,11 +53,11 @@ public class ShopRunner {
 	public static void shopOperation(String input)
 	{
 		System.out.println("Checking shop operation for: " + input);
-		if(!input.matches(".*\\d+.*")) //does not contain numbers, it's an operator else an invalid input
+		if(!input.matches(".*\\d+.*")) //does not contain numbers, it's an operator else an input for amount
 		{
 			try
 			{
-				if (isValidInput(input, 1))
+				assert (isValidInput(input, 1)):"Invalid input for operations.";
 					switch(input)
 					{
 						case "A":
@@ -66,16 +66,10 @@ public class ShopRunner {
 							Display.mainOperation(input);
 							break;
 						case "R":
-							if(ShopHelper.getCart().getTotalItemsCount()<1)
-							{
-								throw new InvalidRemoveException();
-							}
-							else
-							{
-								System.out.println("'B' operation confirmed, moving to sub-operation.");
-								Display.setState(2);
-								Display.mainOperation(input);
-							}
+							assert(!(ShopHelper.getCart().getTotalItemsCount()<1)):"Cart is empty, cannot [Remove].";
+							System.out.println("'B' operation confirmed, moving to sub-operation.");
+							Display.setState(2);
+							Display.mainOperation(input);
 							break;
 						case "D":
 							System.out.println("'D' operation confirmed, moving to sub-operation.");
@@ -83,16 +77,10 @@ public class ShopRunner {
 							Display.mainOperation(input);
 							break;
 						case "C":
-							if(ShopHelper.getCart().getTotalItemsCount()<1)
-							{
-								throw new EmptyCartException();
-							}
-							else
-							{
-								System.out.println("'C' operation confirmed, moving to sub-operation.");
-								Display.setState(4);
-								Display.mainOperation(input);
-							}
+							assert(!(ShopHelper.getCart().getTotalItemsCount()<1)):"Cart is empty, cannot [Checkout].";
+							System.out.println("'C' operation confirmed, moving to sub-operation.");
+							Display.setState(4);
+							Display.mainOperation(input);
 							break;
 						default:
 							throw new InvalidMenuSelectionException();
@@ -124,7 +112,7 @@ public class ShopRunner {
 			System.out.println("Input for product code detected.");
 			try
 			{
-				if(isValidInput(input, 2))
+				assert(isValidInput(input, 2)):"Invalid input for product code.";
 				{
 					System.out.println("Product code [" + itemInput + "] verified. Passing to sub-operation..");
 					subOperation(itemInput); //pass itemCode
@@ -144,7 +132,7 @@ public class ShopRunner {
 			System.out.println("Input for [Add] amount detected.");
 			try
 			{
-				if(isValidInput(input, 3))
+				assert(isValidInput(input, 3)):"Invalid input for [Add] amount.";
 				{
 					System.out.println("Amount verified. Passing to sub-operation [Add]..");
 					subOperation(amountInput); 	//pass itemAmount input
@@ -163,7 +151,7 @@ public class ShopRunner {
 			System.out.println("Input for [Remove] amount detected.");
 			try
 			{
-				if(isValidInput(input, 4))
+				assert(isValidInput(input, 4)):"Invalid input for [Remove] amount.";
 				{
 					System.out.println("Amount verified. Passing to sub-operation [Remove]..");
 					subOperation(amountInput); 	//pass itemAmount input
@@ -179,7 +167,7 @@ public class ShopRunner {
 		else if (Display.getState()==4)
 			try
 			{
-				if(isValidInput(input,5))
+				assert(isValidInput(input,5)):"Invalid [Checkout] detected.";
 					subOperation(input);	//pass cardNumber input
 			}
 			catch (InvalidCreditCardNumberException icce)
@@ -238,14 +226,13 @@ public class ShopRunner {
 			switch(suboper)	//input state done, accept amount and try to process
 			{
 				case 12:
-					if(addToCart(itemInput, Integer.parseInt(input)))
+					assert(addToCart(itemInput, Integer.parseInt(input))):"Invalid amount in sub-operation 12 detected..";
 					{
 						System.out.println("Amount verified. Add process commence.");
 						Display.setState(13);
 						System.out.println("amountEntered : " + amountInput);
 						Display.subOperation(amountInput);
 					}
-					else
 					{
 						System.out.println("Invalid amount in sub-operation 12 detected..");
 						Display.setState(14);
@@ -253,13 +240,12 @@ public class ShopRunner {
 					}
 					break;
 				case 22:
-					if(removeFromCart(itemInput, Integer.parseInt(input)))
+					assert(removeFromCart(itemInput, Integer.parseInt(input))):"Invalid amount in sub-operation 13 detected..";
 					{
 						System.out.println("Amount verified. Remove process commence.");
 						Display.setState(23);
 						Display.subOperation(amountInput);
 					}
-					else
 					{
 						System.out.println("Removal process for [" + itemInput + "],[" + input + "] encountered a problem.");
 						System.out.println("Invalid amount in sub-operation 13 detected..");
@@ -268,12 +254,11 @@ public class ShopRunner {
 					}
 					break;
 				case 42:
-					if(addToCart(itemInput, Integer.parseInt(input)))
+					assert(addToCart(itemInput, Integer.parseInt(input))):"Invalid input in sub-operation 14 detected..";
 					{
 						Display.setState(43);
 						Display.subOperation(amountInput);
 					}
-					else
 					{
 						Display.setState(44);
 						Display.subOperation(input);
